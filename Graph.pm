@@ -109,6 +109,8 @@ sub  to_string ($;$)
 
 
 
+#--------------------------------------------
+#  INTERNAL: Convert input parameters to a graph data object as needed.
 sub _make_graph_data (@)
  {
   if('Text::Graph::Data' eq ref $_[0])
@@ -121,6 +123,8 @@ sub _make_graph_data (@)
    }
  }
 
+#--------------------------------------------
+#  INTERNAL: This routine pads the labels as needed.
 sub _fmt_labels ($@)
  {
   my $right = shift;
@@ -277,14 +281,7 @@ G. Wade Johnson, wade@anomaly.org
 
 =head1 Functions
 
-=head2 Bars
-
-The C<TextHistogram::Bars> function converts a dataset into a list of 
-strings representing the bars of a histogram. The C<TextHistogram::Bars> 
-takes a reference to an array of data to be histogrammed and an optional
-list of named parameters which modifies its function. If used in array
-context, it returns an array of bars. If used in scalar context, it returns
-a reference to an array of bars.
+=head2 new
 
 The list below describes the parameters. 
 
@@ -331,33 +328,6 @@ B<showval> - Flag determining if the value of each bar is displayed to the
 right of the bar. The default value for I<showval> is 0, which does not
 display the value.
 
-=back
-
-=head2 String
-
-The C<TextHistogram::String> function converts a set of values into a
-histogram and returns that histogram as a string. The histogram is labelled
-as specified in the parameters. The C<TextHistogram::String> function
-accepts all of the same parameters as C<TextHistogram::Bars>, with a few 
-extras, described below.
-
-In addition, the first parameter to the function may be either an array
-reference or a hash reference. If it is an array reference, it works the
-same as described for C<TextHistogram::Bars>.
-
-However, if the first parameter is a reference to a hash, the values are
-taken from the hash. If I<labels> is supplied, only the values specified 
-by the I<labels> are used from the hash. If I<labels> is not supplied,
-the I<labels> are taken from the C<keys> of the hash reference.
-
-=over 4
-
-=item *
-
-B<labels> - Reference to an array of labels for the bars of the histogram.
-Must be the same length as the I<values> array. (Required, unless the
-the first parameter is a hash reference.)
-
 =item *
 
 B<separator> - String which separates the labels from the histogram bars. The 
@@ -368,85 +338,121 @@ default value of I<separator> is ' :'.
 B<right> - Flag which specifies the labels should be right-justified. By
 default, this flag is 0, specifying that the labels are left justified.
 
-=item *
+=back
 
-B<sort> - Subroutine reference used to determine the order of the labels when
-the input is a hash reference. If no I<sort> is specified, the labels are
-sorted ASCIIbetically. The value of the I<sort> parameter is a subroutine
-reference which sorts its argument array into the appropriate order.
+=head2 make_lines
+
+The C<make_lines> method converts a dataset into a list of strings representing
+the dataset. The C<make_lines> takes either a C<Text::Graph::Data> object
+or the parameters needed to construct such an object. If used in array
+context, it returns an array of bars. If used in scalar context, it returns
+a reference to an array of bars.
+
+=head2 make_labelled_lines
+
+The C<make_lines> method converts a dataset into a list of strings representing
+the dataset. The C<make_lines> takes either a C<Text::Graph::Data> object
+or the parameters needed to construct such an object. Unlike C<make_lines>,
+each line in this returned list is labelled as described in the
+C<Text::Graph::Data> object. If used in array context, it returns an array of
+bars. If used in scalar context, it returns a reference to an array of bars.
+
+=head2 to_string
+
+The C<to_string> method creates a displayable Graph for the supplied dataset.
+The Graph is labelled as specified in the DataSet. The C<to_string> method
+accepts all of the same parameters as C<make_lines>.
 
 =back
 
-=head2 Print
-
-The C<TextHistogram::Print> function prints a set of values as a histogram.
-The histogram is labelled as specified in the parameters. The
-C<TextHistogram::Print> function accepts all of the same parameters as 
-C<TextHistogram::String>.
-
 =head1 Examples
 
-=head2 Histogram an Array
+=head2 Bar Graph of an Array
 
-  use TextHistogram;
-  TextHistogram::Print( [1,2,4,5,10,3,5],
-                         labels => [ qw/aaaa bb ccc dddddd ee f ghi/ ],
-                       );
-
-Generates the following output:
-
-  aaaa   :*
-  bb     :**
-  ccc    :****
-  dddddd :*****
-  ee     :**********
-  f      :***
-  ghi    :*****
-
-
-=head2 Histogram an Anonymous Hash
-
-  use TextHistogram;
-  TextHistogram::Print( { a=>1, b=>5, c=>20, d=>10, e=>17 } );
+  use Text::Graph;
+  my $graph = Text::Graph->new( 'Bar' );
+  print $graph->to_string( [1,2,4,5,10,3,5],
+                           labels => [ qw/aaaa bb ccc dddddd ee f ghi/ ],
+                         );
 
 Generates the following output:
 
-  a :*
-  b :*****
-  c :********************
-  d :**********
-  e :*****************
+  aaaa   :
+  bb     :*
+  ccc    :***
+  dddddd :****
+  ee     :*********
+  f      :**
+  ghi    :****
 
-=head2 Histogram an Anonymous Hash in Reverse Order
 
-  use TextHistogram;
-  TextHistogram::Print( { a=>1, b=>5, c=>20, d=>10, e=>17 },
-                         sort => sub { sort { $b cmp $a } @_ }
-                       );
+=head2 Line Graph of an Array
 
-Generates the following output:
-
-  e :*****************
-  d :**********
-  c :********************
-  b :*****
-  a :*
-
-=head2 Histogram Part of an Anonymous Hash
-
-  use TextHistogram;
-  TextHistogram::Print( { a=>1, b=>5, c=>20, d=>10, e=>17 },
-                         labels => [ qw(e b a d) ]
-                       );
+  use Text::Graph;
+  my $graph = Text::Graph->new( 'Line' );
+  print $graph->to_string( [1,2,4,5,10,3,5],
+                           labels => [ qw/aaaa bb ccc dddddd ee f ghi/ ],
+                         );
 
 Generates the following output:
 
-  e :*****************
-  b :*****
-  a :*
-  d :**********
+  aaaa   :
+  bb     :*
+  ccc    :  *
+  dddddd :   *
+  ee     :        *
+  f      : *
+  ghi    :   *
 
-=head2 Histogram With Advanced Formatting
+
+=head2 Bar Graph of an Anonymous Hash
+
+  use Text::Graph;
+  my $graph = Text::Graph->new( 'Bar' );
+  print $graph->to_string( { a=>1, b=>5, c=>20, d=>10, e=>17 } );
+
+Generates the following output:
+
+  a :
+  b :****
+  c :*******************
+  d :*********
+  e :****************
+
+=head2 Bar Graph of an Anonymous Hash in Reverse Order
+
+  use Text::Graph;
+  use Text::Graph::Data;
+  my $graph = Text::Graph->new( 'Bar' );
+  my $dataset = Text::Graph::Data->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
+                                        sort => sub { sort { $b cmp $a } @_ });
+  print $graph->to_string( $dataset );
+
+Generates the following output:
+
+  e :****************
+  d :*********
+  c :*******************
+  b :****
+  a :
+
+=head2 Bar Graph of Part of an Anonymous Hash
+
+  use Text::Graph;
+  use Text::Graph::Data;
+  my $graph = Text::Graph->new( 'Bar' );
+  my $dataset = Text::Graph::Data->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
+                                        labels => [ qw(e b a d) ]);
+  print $graph->to_string( $dataset );
+
+Generates the following output:
+
+  e :****************
+  b :****
+  a :
+  d :*********
+
+=head2 Filled Line Graph With Advanced Formatting
 
   use TextHistogram;
   TextHistogram::Print( [1,22,43,500,1000,300,50],
@@ -456,16 +462,27 @@ Generates the following output:
                           log => 1,            # logarithmic graph
                           showval => 1         # show actual values
                         );
+  use Text::Graph;
+  use Text::Graph::Data;
+  my $dataset = Text::Graph::Data->new ([1,22,43,500,1000,300,50],
+                                        [ qw/aaaa bb ccc dddddd ee f ghi/ ]);
+  my $graph = Text::Graph->new( 'Line',
+                                right  => 1,    # right-justify labels
+                                fill => '.',    # change fill-marker
+                                log => 1,       # logarithmic graph
+                                showval => 1    # show actual values
+                              );
+  print $graph->to_string( $dataset );
 
 Generates the following output:
 
     aaaa :         (1)
-      bb :..*      (22)
-     ccc :...*     (43)
-  dddddd :.....*   (500)
-      ee :......*  (1000)
-       f :.....*   (300)
-     ghi :...*     (50)
+      bb :.*      (22)
+     ccc :..*     (43)
+  dddddd :....*   (500)
+      ee :.....*  (1000)
+       f :....*   (300)
+     ghi :..*     (50)
 
 =head1 SEE ALSO
 
