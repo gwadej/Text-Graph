@@ -7,7 +7,7 @@ README
 t/00Graph_config.t
 t/01Graph_Bar.t
 t/02Graph_Line.t
-t/02Graph_Errors.t
+t/03Graph_Errors.t
 t/Graph.t
 t/Graph.t
 t/Graph-DataSet.t
