@@ -17,8 +17,7 @@ $VERSION = '0.11';
 
 sub new
  {
-  my $self = shift;
-  my $class = ref $self || $self;
+  my $class = shift;
   my $style = shift || 'Bar';
 
   my $obj = { _initialize($style),

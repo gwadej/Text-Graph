@@ -17,8 +17,7 @@ $VERSION = '0.1';
 
 sub new
  {
-  my $self = shift;
-  my $class = ref $self || $self;
+  my $class = shift;
   my $obj = {
               values => [],
 	      labels => undef,
