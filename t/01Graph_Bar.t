@@ -8,7 +8,7 @@ use Data::Dumper;
 use Text::Graph;
 use Text::Graph::DataSet;
 
-my $gdat = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+my $dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
                                    [ qw/Monday Tuesday Wednesday Thursday
 				        Friday Saturday Sunday/ ]
 				 );
@@ -24,7 +24,7 @@ my @expected = (
                 '****',
                );
 
-my $out = $graph->make_lines( $gdat );
+my $out = $graph->make_lines( $dset );
 
 is_deeply( $out, \@expected, "Default Bars" );
 
@@ -38,13 +38,13 @@ is_deeply( $out, \@expected, "Default Bars" );
              'Sunday    :****',
             );
 
-$out = $graph->make_labelled_lines( $gdat );
+$out = $graph->make_labelled_lines( $dset );
 
 is_deeply( $out, \@expected, "Default Bar graph" );
 
 my $expected = join( "\n", @expected, '' );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "Default Bar graph" );
 
@@ -61,7 +61,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', right => 1 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "right justified labels" );
 
@@ -78,7 +78,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', separator => '|' );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "different separator" );
 
@@ -95,7 +95,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', showval => 1 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "showing values" );
 
@@ -112,7 +112,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', marker => '#' );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "# as marker" );
 
@@ -129,7 +129,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', fill => '#' );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "# as fill" );
 
@@ -146,7 +146,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', minval => 0, maxval => 15 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "min/max values" );
 
@@ -163,7 +163,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', minval => 0, maxlen => 10 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "showing values" );
 
@@ -178,13 +178,13 @@ Saturday  :****
 Sunday    :
 EOF
 
-$gdat = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
                                 [ qw/Monday Tuesday Wednesday Thursday
 		                     Friday Saturday Sunday/ ]
 				 );
 $graph = Text::Graph->new( 'Bar', log => 1 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph" );
 
@@ -202,7 +202,7 @@ EOF
 
 $graph = Text::Graph->new( 'Bar', log => 1, showval => 1 );
 
-$out = $graph->to_string( $gdat );
+$out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, showing values" );
 

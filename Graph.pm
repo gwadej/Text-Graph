@@ -155,16 +155,16 @@ sub _fmt_labels ($@)
 #  histogram bars.
 sub  _histogram
  {
-  my $gdata = shift;
-  my $parms = { %{$_[0]}, labels => [$gdata->get_labels] };
+  my $dset  = shift;
+  my $parms = { %{$_[0]}, labels => [$dset->get_labels] };
   my @values;
 
   $parms->{fill} ||= $parms->{marker};
 
   die "Data set must be a Text::Graph::DataSet object.\n"
-      unless 'Text::Graph::DataSet' eq ref $gdata;
+      unless 'Text::Graph::DataSet' eq ref $dset;
 
-  my @orig = $gdata->get_values;
+  my @orig = $dset->get_values;
   if($parms->{log})
    {
     @values = map { log } @orig;
