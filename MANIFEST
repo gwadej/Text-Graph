@@ -2,5 +2,8 @@ Changes
 Graph.pm
 Makefile.PL
 MANIFEST
+t/00Graph_config.t
+t/01Graph_Bar.t
+t/Graph.t
 t/Graph.t
 t/Graph-Data.t

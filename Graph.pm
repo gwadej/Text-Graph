@@ -23,7 +23,6 @@ sub new
 
   my $obj = { _initialize($style),
               # data display
-	      spacing   => 0,
 	      log       => 0,
 	      # data limit
 	      maxval    => undef,
@@ -66,7 +65,6 @@ sub  get_marker  ($)  { $_[0]->{marker}; }
 sub  get_fill    ($)  { $_[0]->{fill}; }
 sub  get_line    ($)  { $_[0]->{line}; }
 sub  is_log      ($)  { $_[0]->{log}; }
-sub  get_spacing ($)  { $_[0]->{spacing}; }
 
 # Data Limit Options
 sub  get_maxlen  ($)  { $_[0]->{maxlen}; }
@@ -77,6 +75,80 @@ sub  get_minval  ($)  { $_[0]->{minval}; }
 sub  get_separator ($) { $_[0]->{separator}; }
 sub  is_right_justified ($) { $_[0]->{right}; }
 sub  show_value    ($) { $_[0]->{showval}; }
+
+
+sub  make_lines ($;$)
+ {
+  my $self = shift;
+  my $data = _make_graph_data( @_ );
+
+  my @lines = _histogram( $data, $self );
+
+  wantarray ? @lines : \@lines;
+ }
+
+
+sub  make_labelled_lines ($;$)
+ {
+  my $self = shift;
+  my $data = _make_graph_data( @_ );
+
+  my @labels = _fmt_labels( $self->{right}, $data->get_labels() );
+  my @lines  = $self->make_lines( $data );
+  for(my $i = 0; $i < @lines; ++$i)
+   {
+    $lines[$i] = $labels[$i] . $self->{separator} . $lines[$i];
+   }
+
+  wantarray ? @lines : \@lines;
+ }
+
+
+sub  to_string ($;$)
+ {
+  my $self = shift;
+  
+  join( "\n", $self->make_labelled_lines( @_ ) ) . "\n";
+ }
+
+
+
+sub _make_graph_data (@)
+ {
+  if('Text::Graph::Data' eq ref $_[0])
+   {
+    return shift;
+   }
+  else
+   {
+    return Text::Graph::Data->new( @_ );
+   }
+ }
+
+sub _fmt_labels ($@)
+ {
+  my $right = shift;
+  my $len   = 0;
+  my @labels;
+
+  foreach(@_)
+   {
+    $len = length if length > $len;
+   }
+
+  if($right)
+   {
+    @labels = map { (' ' x ($len-length)).$_ } @_;
+   }
+  else
+   {
+    my $pad = ' ' x $len;
+
+    @labels = map { substr( ($_.$pad), 0, $len ) } @_;
+   }
+
+  @labels;
+ }
 
 #--------------------------------------------
 #  Generate a list of histogram bars
@@ -100,34 +172,36 @@ sub  Bars
 #  histogram bars.
 sub  _histogram
  {
-  my $data  = shift;
-  my $parms = shift;
+  my $gdata = shift;
+  my $parms = { %{$_[0]}, labels => [$gdata->get_labels] };
   my @values;
 
   $parms->{fill} ||= $parms->{marker};
 
-  die "Data set must be an array reference.\n" unless 'ARRAY' eq ref $data;
+  die "Data set must be a Text::Graph::Data object.\n"
+      unless 'Text::Graph::Data' eq ref $gdata;
 
+  my @orig = $gdata->get_values;
   if($parms->{log})
    {
-    @values = map { log } @{$data};
+    @values = map { log } @orig;
 
     $parms->{minval} = 1 if defined $parms->{minval} and !$parms->{minval};
 
-	$parms->{minval} = log $parms->{minval} if $parms->{minval};
-	$parms->{maxval} = log $parms->{maxval} if $parms->{maxval};
+    $parms->{minval} = log $parms->{minval} if $parms->{minval};
+    $parms->{maxval} = log $parms->{maxval} if $parms->{maxval};
    }
   else
    {
-    @values = @{$data};
+    @values = @orig;
    }
 
 
   unless(defined($parms->{minval}) and defined($parms->{maxval}))
    {
     my ($min,$max) = _minmax( \@values );
-	$parms->{minval} = $min unless defined $parms->{minval};
-	$parms->{maxval} = $max unless defined $parms->{maxval};
+    $parms->{minval} = $min unless defined $parms->{minval};
+    $parms->{maxval} = $max unless defined $parms->{maxval};
    }
 
   $parms->{maxlen} = $parms->{maxval} - $parms->{minval} + 1
@@ -144,10 +218,10 @@ sub  _histogram
   if($parms->{showval})
    {
     foreach(0..$#values)
-	 {
-	  $values[$_] .= (' ' x ($parms->{maxlen}-length $values[$_]))
-	                 .'  ('. $data->[$_] . ')';
-	 }
+     {
+      $values[$_] .= (' ' x ($parms->{maxlen}-length $values[$_]))
+	             .'  ('. $orig[$_] . ')';
+     }
    }
 
   @values;
@@ -228,8 +302,8 @@ sub  _minmax
 
   foreach(@{$list})
    {
-    if($_ > $max) {$max = $_;}
-	elsif($_ < $min) {$min = $_;}
+    if($_ > $max)    {$max = $_;}
+    elsif($_ < $min) {$min = $_;}
    }
 
   ($min, $max);
