@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 14;
+use Test::More tests => 18;
 use Data::Dumper;
 
 use Text::Graph;
@@ -47,28 +47,6 @@ my $expected = join( "\n", @expected, '' );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "Default Bar graph" );
-
-# Raw numbers, not a dataset
-my @unlabelledExpected = (
-             ' :',
-             ' :*',
-             ' :**',
-             ' :***',
-             ' :*********',
-             ' :*******************',
-             ' :****',
-            );
-
-$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
-
-is_deeply( $out, \@unlabelledExpected, "Not a dataset" );
-
-$expected = join( "\n", @unlabelledExpected, '' );
-
-$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
-
-is( $out, $expected, "Not a dataset" );
-
 
 # test right-justified labels
 $expected = <<'EOF';
@@ -227,4 +205,78 @@ $graph = Text::Graph->new( 'Bar', log => 1, showval => 1 );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, showing values" );
+
+# Raw numbers, not a dataset
+$graph = Text::Graph->new( 'Bar' );
+my @unlabelledExpected = (
+             ' :',
+             ' :*',
+             ' :**',
+             ' :***',
+             ' :*********',
+             ' :*******************',
+             ' :****',
+            );
+
+$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
+
+is_deeply( $out, \@unlabelledExpected, "Not a dataset" );
+
+$expected = join( "\n", @unlabelledExpected, '' );
+
+$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
+
+is( $out, $expected, "Not a dataset" );
+
+# No fill
+$graph = Text::Graph->new( 'Bar', fill => '' );
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+@expected = (
+             'Monday    :',
+             'Tuesday   :*',
+             'Wednesday :**',
+             'Thursday  :***',
+             'Friday    :*********',
+             'Saturday  :*******************',
+             'Sunday    :****',
+            );
+
+$out = $graph->make_labelled_lines( $dset );
+
+is_deeply( $out, \@expected, "No fill" );
+
+$expected = join( "\n", @expected, '' );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "No Fill" );
+
+# No fill, no marker
+$graph = Text::Graph->new( 'Bar', fill => '', marker => '' );
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+@expected = (
+             'Monday    :',
+             'Tuesday   :',
+             'Wednesday :',
+             'Thursday  :',
+             'Friday    :',
+             'Saturday  :',
+             'Sunday    :',
+            );
+
+$out = $graph->make_labelled_lines( $dset );
+
+is_deeply( $out, \@expected, "No fill or marker" );
+
+$expected = join( "\n", @expected, '' );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "No Fill or marker" );
 
