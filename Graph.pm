@@ -113,13 +113,13 @@ sub  to_string ($;$)
 #  INTERNAL: Convert input parameters to a graph data object as needed.
 sub _make_graph_data (@)
  {
-  if('Text::Graph::Data' eq ref $_[0])
+  if('Text::Graph::DataSet' eq ref $_[0])
    {
     return shift;
    }
   else
    {
-    return Text::Graph::Data->new( @_ );
+    return Text::Graph::DataSet->new( @_ );
    }
  }
 
@@ -161,8 +161,8 @@ sub  _histogram
 
   $parms->{fill} ||= $parms->{marker};
 
-  die "Data set must be a Text::Graph::Data object.\n"
-      unless 'Text::Graph::Data' eq ref $gdata;
+  die "Data set must be a Text::Graph::DataSet object.\n"
+      unless 'Text::Graph::DataSet' eq ref $gdata;
 
   my @orig = $gdata->get_values;
   if($parms->{log})
@@ -343,7 +343,7 @@ default, this flag is 0, specifying that the labels are left justified.
 =head2 make_lines
 
 The C<make_lines> method converts a dataset into a list of strings representing
-the dataset. The C<make_lines> takes either a C<Text::Graph::Data> object
+the dataset. The C<make_lines> takes either a C<Text::Graph::DataSet> object
 or the parameters needed to construct such an object. If used in array
 context, it returns an array of bars. If used in scalar context, it returns
 a reference to an array of bars.
@@ -351,10 +351,10 @@ a reference to an array of bars.
 =head2 make_labelled_lines
 
 The C<make_lines> method converts a dataset into a list of strings representing
-the dataset. The C<make_lines> takes either a C<Text::Graph::Data> object
+the dataset. The C<make_lines> takes either a C<Text::Graph::DataSet> object
 or the parameters needed to construct such an object. Unlike C<make_lines>,
 each line in this returned list is labelled as described in the
-C<Text::Graph::Data> object. If used in array context, it returns an array of
+C<Text::Graph::DataSet> object. If used in array context, it returns an array of
 bars. If used in scalar context, it returns a reference to an array of bars.
 
 =head2 to_string
@@ -422,9 +422,9 @@ Generates the following output:
 =head2 Bar Graph of an Anonymous Hash in Reverse Order
 
   use Text::Graph;
-  use Text::Graph::Data;
+  use Text::Graph::DataSet;
   my $graph = Text::Graph->new( 'Bar' );
-  my $dataset = Text::Graph::Data->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
+  my $dataset = Text::Graph::DataSet->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
                                         sort => sub { sort { $b cmp $a } @_ });
   print $graph->to_string( $dataset );
 
@@ -439,9 +439,9 @@ Generates the following output:
 =head2 Bar Graph of Part of an Anonymous Hash
 
   use Text::Graph;
-  use Text::Graph::Data;
+  use Text::Graph::DataSet;
   my $graph = Text::Graph->new( 'Bar' );
-  my $dataset = Text::Graph::Data->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
+  my $dataset = Text::Graph::DataSet->new ({ a=>1, b=>5, c=>20, d=>10, e=>17 },
                                         labels => [ qw(e b a d) ]);
   print $graph->to_string( $dataset );
 
@@ -463,8 +463,8 @@ Generates the following output:
                           showval => 1         # show actual values
                         );
   use Text::Graph;
-  use Text::Graph::Data;
-  my $dataset = Text::Graph::Data->new ([1,22,43,500,1000,300,50],
+  use Text::Graph::DataSet;
+  my $dataset = Text::Graph::DataSet->new ([1,22,43,500,1000,300,50],
                                         [ qw/aaaa bb ccc dddddd ee f ghi/ ]);
   my $graph = Text::Graph->new( 'Line',
                                 right  => 1,    # right-justify labels
@@ -476,7 +476,7 @@ Generates the following output:
 
 Generates the following output:
 
-    aaaa :         (1)
+    aaaa :        (1)
       bb :.*      (22)
      ccc :..*     (43)
   dddddd :....*   (500)

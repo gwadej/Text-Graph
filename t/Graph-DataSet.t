@@ -4,22 +4,22 @@ use strict;
 use Test::More tests => 28;
 use Data::Dumper;
 
-BEGIN { use_ok( 'Text::Graph::Data' ); }
+BEGIN { use_ok( 'Text::Graph::DataSet' ); }
 
-can_ok( 'Text::Graph::Data', qw(new get_values get_labels) );
+can_ok( 'Text::Graph::DataSet', qw(new get_values get_labels) );
 
 # test default construction
 my $gdat = Text::Graph::Data->new();
 
 ok( defined $gdat, "default constructed" );
-isa_ok( $gdat, 'Text::Graph::Data' );
+isa_ok( $gdat, 'Text::Graph::DataSet' );
 my $vals = $gdat->get_values();
 is_deeply( $vals, [], "no values by default" );
 my $lbls = $gdat->get_labels();
 is_deeply( $lbls, [], "no labels by default" );
 
 # test construction with just values
-$gdat = Text::Graph::Data->new( [ 1..4 ] );
+$gdat = Text::Graph::DataSet->new( [ 1..4 ] );
 
 ok( defined $gdat, "just values constructed" );
 $vals = $gdat->get_values();
@@ -28,7 +28,7 @@ $lbls = $gdat->get_labels();
 is_deeply( $lbls, [ ('') x 4 ], "default labels" );
 
 # test construction with values and labels
-$gdat = Text::Graph::Data->new( [ 1..4 ], [ 'a'..'d' ] );
+$gdat = Text::Graph::DataSet->new( [ 1..4 ], [ 'a'..'d' ] );
 
 ok( defined $gdat, "values and labels constructed" );
 $vals = $gdat->get_values();
@@ -37,7 +37,7 @@ $lbls = $gdat->get_labels();
 is_deeply( $lbls, [ 'a' .. 'd' ], "Supplied labels" );
 
 # test construction with values and too few labels
-$gdat = Text::Graph::Data->new( [ 1..4 ], [ 'a', 'd' ] );
+$gdat = Text::Graph::DataSet->new( [ 1..4 ], [ 'a', 'd' ] );
 
 ok( defined $gdat, "values and labels constructed" );
 $vals = $gdat->get_values();
@@ -56,7 +56,7 @@ my @lbls = $gdat->get_labels();
 is_deeply( \@lbls, $lbls, "same labels" );
 
 # test construction with a hash
-$gdat = Text::Graph::Data->new( { a => 1, bb => 2, cac => 3, dd => 4 } );
+$gdat = Text::Graph::DataSet->new( { a => 1, bb => 2, cac => 3, dd => 4 } );
 
 ok( defined $gdat, "constructed from a hash" );
 $vals = $gdat->get_values();
@@ -65,7 +65,7 @@ $lbls = $gdat->get_labels();
 is_deeply( $lbls, [ qw/a bb cac dd/ ], "keys as labels" );
 
 # test construction with a hash with labels
-$gdat = Text::Graph::Data->new( { a => 1, bb => 2, cac => 3, dd => 4 },
+$gdat = Text::Graph::DataSet->new( { a => 1, bb => 2, cac => 3, dd => 4 },
                                 [ qw/bb a dd/ ]
                               );
 
@@ -77,7 +77,7 @@ is_deeply( $lbls, [ qw/bb a dd/ ], "keys as labels" );
 
 
 # test construction with a hash with sort
-$gdat = Text::Graph::Data->new( { a => 1, bb => 2, cac => 3, dd => 4 },
+$gdat = Text::Graph::DataSet->new( { a => 1, bb => 2, cac => 3, dd => 4 },
                                 sort => sub { sort { $b cmp $a } @_; }
                               );
 

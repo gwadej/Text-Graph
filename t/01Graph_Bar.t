@@ -6,9 +6,9 @@ use Test::More tests => 12;
 use Data::Dumper;
 
 use Text::Graph;
-use Text::Graph::Data;
+use Text::Graph::DataSet;
 
-my $gdat = Text::Graph::Data->new( [1 .. 4, 10, 20, 5],
+my $gdat = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
                                    [ qw/Monday Tuesday Wednesday Thursday
 				        Friday Saturday Sunday/ ]
 				 );
@@ -178,7 +178,7 @@ Saturday  :****
 Sunday    :
 EOF
 
-$gdat = Text::Graph::Data->new( [1000, 20, 30, 40, 100, 200, 5],
+$gdat = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
                                 [ qw/Monday Tuesday Wednesday Thursday
 		                     Friday Saturday Sunday/ ]
 				 );

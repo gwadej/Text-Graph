@@ -2,8 +2,9 @@ Changes
 Graph.pm
 Makefile.PL
 MANIFEST
+Graph/DataSet.pm
 t/00Graph_config.t
 t/01Graph_Bar.t
 t/Graph.t
 t/Graph.t
-t/Graph-Data.t
+t/Graph-DataSet.t

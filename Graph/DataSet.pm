@@ -1,4 +1,4 @@
-package Text::Graph::Data;
+package Text::Graph::DataSet;
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
