@@ -38,8 +38,9 @@ sub new
     $obj->{labels} = shift if 'ARRAY' eq ref $_[0];
    }
 
-  if(@_ and 0 == (@_ % 2))
+  if(@_)
    {
+    die "Odd number of parameters to new.\n" unless 0 == (@_ % 2);
     $obj = { %$obj, @_ };
    }
 
@@ -91,8 +92,6 @@ sub _initialize ($)
    {
     $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
    }
-
-  $self->{labels} ||= [];
 
   if(scalar @{$self->{values}} > scalar @{$self->{labels}})
    {
