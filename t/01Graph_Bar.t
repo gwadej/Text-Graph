@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Data::Dumper;
 
 use Text::Graph;
@@ -360,4 +360,25 @@ $graph = Text::Graph->new( 'Bar', log => 1, minval => 1, maxval => 1000 );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, minval and maxval" );
+
+# test clip both ends of range
+$expected = <<'EOF';
+Monday    :
+Tuesday   :
+Wednesday :*
+Thursday  :**
+Friday    :********
+Saturday  :**********
+Sunday    :***
+EOF
+
+$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
+                                   [ qw/Monday Tuesday Wednesday Thursday
+				        Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', minval => 2, maxval => 12 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "clip both ends" );
 
