@@ -50,10 +50,6 @@ sub _initialize ($)
    {
     ( style => 'Line', marker => '*', fill => ' ', line => '.' );
    }
-  elsif('filled' eq $style)
-   {
-    ( style => 'Filled', marker => '*', fill => '.', line => ' ' );
-   }
   else
    {
     die "Unknown style '$style'.\n";
@@ -151,23 +147,6 @@ sub _fmt_labels ($@)
  }
 
 #--------------------------------------------
-#  Generate a list of histogram bars
-sub  Bars
- {
-  my $data  = shift;
-  my %parms = ( marker => '*',    maxlen     => undef,
-                minval => 0,  	  maxval     => undef,
-             	'log'  => 0,	  showval    => 0,
-		        @_
-              );
-
-  my @values = _histogram( $data, \%parms );
-
-  wantarray ? @values : \@values;
- }
-
-
-#--------------------------------------------
 #  INTERNAL: This is the workhorse routine that actually builds the
 #  histogram bars.
 sub  _histogram
@@ -229,68 +208,6 @@ sub  _histogram
 
 
 #--------------------------------------------
-#  INTERNAL: This is the workhorse routine that actually builds the
-#  histogram bars.
-sub  String
- {
-  my $data  = shift;
-  my %parms = ( marker => '*',    maxlen     => undef,
-                minval => 0,  	  maxval     => undef,
-             	'log'  => 0,  	  separator  => ' :',
-				right  => 0,	  showval    => 0,
-				'sort' => sub { sort @_ },
-		        @_
-              );
-
-  $data = _canonicalize_dataset( $data, \%parms );
-
-  die "Number of labels mismatch\n" unless scalar @{$parms{labels}} ==
-                                           scalar @{$data};
-
-  my @values = _histogram( $data, \%parms );
-
-  my $len = 0;
-
-  foreach(@{$parms{labels}})
-   {
-    $len = length if length > $len;
-   }
-
-  my @labels;
-  if($parms{right})
-   {
-    @labels = map { (' ' x ($len-length)).$_ } @{$parms{labels}};
-   }
-  else
-   {
-    my $pad = ' ' x $len;
-
-    @labels = map { substr( ($_.$pad), 0, $len ) } @{$parms{labels}};
-   }
-
-  my $Output = '';
-
-  for(my $i=0;$i < scalar @labels;++$i)
-   {
-    $Output .= $labels[$i]. $parms{separator}. $values[$i]. "\n";
-   }
-
-  $Output;
- }
-
-
-
-#--------------------------------------------
-#  INTERNAL: This is the workhorse routine that actually builds the
-#  histogram bars.
-sub  Print
- {
-  print String( @_ );
- }
-
-
-
-#--------------------------------------------
 #  INTERNAL: This routine finds both the minimum and maximum of
 #  an array of values.
 sub  _minmax
@@ -330,31 +247,6 @@ sub  _makebar
 
   $val>0 ? (($f x ($val-1)) . $m) : '';
  }
-
-
-sub  _canonicalize_dataset
- {
-  my $data = shift;
-  my $hist = shift;
-
-  if('HASH'  eq ref $data)
-   {
-	unless(exists $hist->{labels})
-	 {
-	  if(exists $hist->{sort})
-	   {
-	    $hist->{labels} = [ $hist->{sort}->( keys %{$data} ) ];
-	   }
-	 }
-
-	$data = [ map { $data->{$_} } @{$hist->{labels}} ];
-   }
-
-  $data;
- }
-
-
-
 
 1;
 __END__
