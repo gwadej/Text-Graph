@@ -83,12 +83,9 @@ sub _initialize ($)
      
     $self->{values} = [ @{$self->{hash}}{@{$self->{labels}}} ];
    }
-  elsif(defined $self->{values})
+  elsif(!defined $self->{labels})
    {
-    unless(defined $self->{labels})
-     {
-      $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
-     }
+    $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
    }
 
   $self->{labels} ||= [];
