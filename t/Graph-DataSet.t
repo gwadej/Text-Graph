@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
-use Test::More tests => 31;
+use Test::More tests => 34;
 use Data::Dumper;
 
 BEGIN { use_ok( 'Text::Graph::DataSet' ); }
@@ -95,3 +95,13 @@ $vals = $dset->get_values();
 is_deeply( $vals, [ 4, 3, 2, 1 ], "values match" );
 $lbls = $dset->get_labels();
 is_deeply( $lbls, [ qw/dd cac bb a/ ], "keys as labels" );
+
+
+$dset = Text::Graph::DataSet->new( { a => 1, bb => 2, cac => 3, dd => 4 },
+                                sort => undef
+                              );
+ok( defined $dset, "constructed from a hash with keys" );
+$vals = $dset->get_values();
+is_deeply( [ sort @{$vals} ], [ 1, 2, 3, 4 ], "values match" );
+$lbls = $dset->get_labels();
+is_deeply( [ sort @{$lbls} ], [ qw/a bb cac dd/ ], "keys as labels" );

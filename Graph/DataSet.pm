@@ -79,6 +79,10 @@ sub _initialize ($)
        {
         $self->{labels} = [ $self->{sort}->( keys %{$self->{hash}} ) ];
        }
+      else
+       {
+        $self->{labels} = [ keys %{$self->{hash}} ];
+       }
      }
      
     $self->{values} = [ @{$self->{hash}}{@{$self->{labels}}} ];
