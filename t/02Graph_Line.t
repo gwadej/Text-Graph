@@ -2,7 +2,7 @@
 # Test building Line graphs
 
 use strict;
-use Test::More tests => 16;
+use Test::More tests => 18;
 use Data::Dumper;
 
 use Text::Graph;
@@ -201,6 +201,23 @@ $out = $graph->to_string( $dset );
 
 is( $out, $expected, "showing values" );
 
+# test maxval
+$expected = <<'EOF';
+Monday    :
+Tuesday   :*
+Wednesday : *
+Thursday  :  *
+Friday    :        *
+Saturday  :                  *
+Sunday    :   *
+EOF
+
+$graph = Text::Graph->new( 'Line', maxval => 20 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "maxval only" );
+
 # test log chart
 $expected = <<'EOF';
 Monday    :    *
@@ -281,4 +298,25 @@ $graph = Text::Graph->new( 'Line', log => 1, minval => 1 );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, 1 minval" );
+
+# test log chart with 1 minval and 1000 maxval
+$expected = <<'EOF';
+Monday    :      *
+Tuesday   :  *
+Wednesday :  *
+Thursday  :   *
+Friday    :    *
+Saturday  :    *
+Sunday    : *
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Line', log => 1, minval => 1, maxval => 1000 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, minval and maxval" );
 

@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 20;
+use Test::More tests => 22;
 use Data::Dumper;
 
 use Text::Graph;
@@ -167,6 +167,23 @@ $out = $graph->to_string( $dset );
 
 is( $out, $expected, "showing values" );
 
+# test maxval
+$expected = <<'EOF';
+Monday    :
+Tuesday   :*
+Wednesday :**
+Thursday  :***
+Friday    :*********
+Saturday  :*******************
+Sunday    :****
+EOF
+
+$graph = Text::Graph->new( 'Bar', maxval => 20 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "maxval only" );
+
 # test log chart
 $expected = <<'EOF';
 Monday    :*****
@@ -321,4 +338,26 @@ $expected = join( "\n", @expected, '' );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "No Fill or marker" );
+
+
+# test log chart with 1 minval and 1000 maxval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 1, maxval => 1000 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, minval and maxval" );
 
