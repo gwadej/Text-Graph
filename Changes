@@ -1,5 +1,11 @@
 Revision history for Perl extension Text::Graph.
 
+0.2   Mon Feb 14 22:47:40 2005
+	- Achieved full coverage on tests.
+        - Added messages to all tests.
+	- Removed some 'can't happen' cases in the code
+0.1   Sun Jun  6 11:09:00 2004
+	- First version released on CPAN
 0.01  Sat Jun  5 10:17:52 2004
 	- original version; created by h2xs 1.19
 
