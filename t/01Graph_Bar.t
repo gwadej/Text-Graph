@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 18;
+use Test::More tests => 20;
 use Data::Dumper;
 
 use Text::Graph;
@@ -205,6 +205,48 @@ $graph = Text::Graph->new( 'Bar', log => 1, showval => 1 );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph, showing values" );
+
+# test log chart with 0 minval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 0 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, 0 minval" );
+
+# test log chart with 1 minval
+$expected = <<'EOF';
+Monday    :*******
+Tuesday   :***
+Wednesday :***
+Thursday  :****
+Friday    :*****
+Saturday  :*****
+Sunday    :**
+EOF
+
+$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
+                                [ qw/Monday Tuesday Wednesday Thursday
+		                     Friday Saturday Sunday/ ]
+				 );
+$graph = Text::Graph->new( 'Bar', log => 1, minval => 1 );
+
+$out = $graph->to_string( $dset );
+
+is( $out, $expected, "log graph, 1 minval" );
 
 # Raw numbers, not a dataset
 $graph = Text::Graph->new( 'Bar' );
