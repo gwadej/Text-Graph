@@ -2,7 +2,7 @@
 # Test building Bar graphs
 
 use strict;
-use Test::More tests => 12;
+use Test::More tests => 14;
 use Data::Dumper;
 
 use Text::Graph;
@@ -47,6 +47,28 @@ my $expected = join( "\n", @expected, '' );
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "Default Bar graph" );
+
+# Raw numbers, not a dataset
+my @unlabelledExpected = (
+             ' :',
+             ' :*',
+             ' :**',
+             ' :***',
+             ' :*********',
+             ' :*******************',
+             ' :****',
+            );
+
+$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
+
+is_deeply( $out, \@unlabelledExpected, "Not a dataset" );
+
+$expected = join( "\n", @unlabelledExpected, '' );
+
+$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
+
+is( $out, $expected, "Not a dataset" );
+
 
 # test right-justified labels
 $expected = <<'EOF';

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# Test building Bar graphs
+# Test building Line graphs
 
 use strict;
-use Test::More tests => 12;
+use Test::More tests => 14;
 use Data::Dumper;
 
 use Text::Graph;
@@ -58,6 +58,40 @@ Wednesday : *
  Saturday :                  *
    Sunday :   *
 EOF
+
+# Raw numbers, not a dataset
+$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
+
+my @unlabelledExpected = (
+             ' :',
+             ' :*',
+             ' : *',
+             ' :  *',
+             ' :        *',
+             ' :                  *',
+             ' :   *',
+            );
+
+
+is_deeply( $out, \@unlabelledExpected, "Make lines without a dataset object" );
+
+$expected = join( "\n", @unlabelledExpected, '' );
+
+$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
+
+is( $out, $expected, "Graph without a dataset object." );
+
+# test right-justified labels
+$expected = <<'EOF';
+   Monday :
+  Tuesday :*
+Wednesday : *
+ Thursday :  *
+   Friday :        *
+ Saturday :                  *
+   Sunday :   *
+EOF
+
 
 $graph = Text::Graph->new( 'Line', right => 1 );
 

@@ -40,12 +40,14 @@ sub new
 
 sub _initialize ($)
  {
-  my $style = lc shift;
-  if('bar' eq $style)
+  my $style = shift;
+  my $lstyle = lc $style;
+
+  if('bar' eq $lstyle)
    {
     ( style => 'Bar', marker => '*', line => ' ' );
    }
-  elsif('line' eq $style)
+  elsif('line' eq $lstyle)
    {
     ( style => 'Line', marker => '*', fill => ' ', line => '.' );
    }
