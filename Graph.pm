@@ -363,8 +363,6 @@ The C<to_string> method creates a displayable Graph for the supplied dataset.
 The Graph is labelled as specified in the DataSet. The C<to_string> method
 accepts all of the same parameters as C<make_lines>.
 
-=back
-
 =head1 Examples
 
 =head2 Bar Graph of an Array

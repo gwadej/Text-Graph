@@ -9,7 +9,7 @@ BEGIN { use_ok( 'Text::Graph::DataSet' ); }
 can_ok( 'Text::Graph::DataSet', qw(new get_values get_labels) );
 
 # test default construction
-my $gdat = Text::Graph::Data->new();
+my $gdat = Text::Graph::DataSet->new();
 
 ok( defined $gdat, "default constructed" );
 isa_ok( $gdat, 'Text::Graph::DataSet' );
