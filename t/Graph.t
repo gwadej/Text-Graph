@@ -16,20 +16,20 @@ my $graph = Text::Graph->new();
 
 ok( defined $graph, "default constructed" );
 isa_ok( $graph, 'Text::Graph' );
-is( $graph->get_marker, '*' );
-is( $graph->get_fill, '*' );
-is( $graph->get_line, ' ' );
+is( $graph->get_marker, '*', "Default marker" );
+is( $graph->get_fill, '*', "Default fill" );
+is( $graph->get_line, ' ', "Default line" );
 
 # test Data Display Options
-ok( !$graph->is_log );
+ok( !$graph->is_log, "Default is linear" );
 
 # test Data Limit Options
-ok( !defined $graph->get_maxlen );
-ok( !defined $graph->get_maxval );
-ok( !defined $graph->get_minval );
+ok( !defined $graph->get_maxlen, "No max length" );
+ok( !defined $graph->get_maxval, "No max value" );
+ok( !defined $graph->get_minval, "No min value" );
 
 # test Graph Display Options
-is( $graph->get_separator, ' :' );
-ok( !$graph->is_right_justified );
-ok( !$graph->show_value );
+is( $graph->get_separator, ' :', "Default separator" );
+ok( !$graph->is_right_justified, "Default labels left justified" );
+ok( !$graph->show_value, "Default don't show values" );
 
