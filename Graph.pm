@@ -162,9 +162,6 @@ sub  _histogram
 
   $parms->{fill} ||= $parms->{marker};
 
-  die "Data set must be a Text::Graph::DataSet object.\n"
-      unless 'Text::Graph::DataSet' eq ref $dset;
-
   my @orig = $dset->get_values;
   if($parms->{log})
    {
