@@ -12,7 +12,7 @@ require Exporter;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.21';
+$VERSION = '0.22';
 
 
 sub new
@@ -38,6 +38,9 @@ sub new
   bless $obj, $class;
  }
 
+#--------------------------------------------
+#  INTERNAL: Initialize the default parameters based on the supplied
+#  style.
 sub _initialize ($)
  {
   my $style = shift;
@@ -251,6 +254,7 @@ sub  _makebar
  }
 
 1;
+
 __END__
 
 =head1 NAME
@@ -337,6 +341,53 @@ B<right> - Flag which specifies the labels should be right-justified. By
 default, this flag is 0, specifying that the labels are left justified.
 
 =back
+
+=head2 get_marker
+
+The C<get_marker> method returns the marker associated with this graph.
+
+=head2 get_fill
+
+The C<get_fill> method returns the fill character used for this graph.
+
+=head2 get_line
+
+The C<get_line> method returns the line character used for this graph.
+
+=head2 is_log
+
+The C<is_log> method returns a flag telling whether this is a logarithmic
+graph (true) or linear graph (false).
+
+=head2 get_maxlen
+
+The C<get_maxlen> method returns the maximum length of the graph this value
+is used to scale the graph.
+
+=head2 get_maxval
+
+The C<get_maxval> method returns the maximum value cutoff defined for this
+graph. A value of C<undef> means the graph is not cut off.
+
+=head2 get_minval
+
+The C<get_minval> method returns the minimum value cutoff defined for this
+graph. A value of C<undef> means the graph is not cut off.
+
+=head2 get_separator
+
+The C<get_separator> method returns the string used to separate the labels
+from the graph.
+
+=head2 is_right_justified
+
+The C<get_separator> method returns true if the labels are right justified,
+false otherwise.
+
+=head2 show_value
+
+The C<show_value> method returns true if the actual values are shown next to
+the bars, false otherwise.
 
 =head2 make_lines
 

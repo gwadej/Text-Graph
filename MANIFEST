@@ -11,4 +11,6 @@ t/03Graph_Errors.t
 t/Graph.t
 t/Graph.t
 t/Graph-DataSet.t
+t/pod.t
+t/pod-coverage.t
 META.yml                                 Module meta-data (added by MakeMaker)
