@@ -1,5 +1,9 @@
 Revision history for Perl extension Text::Graph.
 
+0.23  Sun Jun  5 00:43 2005
+        - Corrected Change log. (Shouldn't do updates at this time of night.)
+0.22  Sun Jun  5 00:40 2005
+        - Added testing for POD docs.
 0.21  Wed Feb 16 18:25 2005
 	- Corrected the creation of the distribution file.
 0.2   Mon Feb 14 22:47 2005

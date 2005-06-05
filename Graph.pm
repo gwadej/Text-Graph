@@ -12,7 +12,7 @@ require Exporter;
 @EXPORT = qw(
 	
 );
-$VERSION = '0.22';
+$VERSION = '0.23';
 
 
 sub new
