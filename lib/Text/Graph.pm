@@ -3,6 +3,7 @@ package Text::Graph;
 use strict;
 use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use Text::Graph::DataSet;
 
 require Exporter;
 
