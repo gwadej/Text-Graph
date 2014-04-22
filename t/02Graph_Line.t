@@ -1,42 +1,38 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # Test building Line graphs
 
 use strict;
+use warnings;
 use Test::More tests => 19;
 use Data::Dumper;
 
 use Text::Graph;
 use Text::Graph::DataSet;
 
-my $dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
-                                   [ qw/Monday Tuesday Wednesday Thursday
-				        Friday Saturday Sunday/ ]
-				 );
+my $dset = Text::Graph::DataSet->new(
+    [ 1 .. 4, 10, 20, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 my $graph = Text::Graph->new( 'Line' );
 
-my @expected = (
-                '',
-                '*',
-                ' *',
-                '  *',
-                '        *',
-                '                  *',
-                '   *',
-               );
+my @expected = ( '', '*', ' *', '  *', '        *', '                  *', '   *', );
 
 my $out = $graph->make_lines( $dset );
 
 is_deeply( $out, \@expected, "Default Line" );
 
 @expected = (
-             'Monday    :',
-             'Tuesday   :*',
-             'Wednesday : *',
-             'Thursday  :  *',
-             'Friday    :        *',
-             'Saturday  :                  *',
-             'Sunday    :   *',
-            );
+    'Monday    :',
+    'Tuesday   :*',
+    'Wednesday : *',
+    'Thursday  :  *',
+    'Friday    :        *',
+    'Saturday  :                  *',
+    'Sunday    :   *',
+);
 
 $out = $graph->make_labelled_lines( $dset );
 
@@ -60,24 +56,16 @@ Wednesday : *
 EOF
 
 # Raw numbers, not a dataset
-$out = $graph->make_labelled_lines( [1 .. 4, 10, 20, 5] );
+$out = $graph->make_labelled_lines( [ 1 .. 4, 10, 20, 5 ] );
 
-my @unlabelledExpected = (
-             ' :',
-             ' :*',
-             ' : *',
-             ' :  *',
-             ' :        *',
-             ' :                  *',
-             ' :   *',
-            );
-
+my @unlabelledExpected =
+    ( ' :', ' :*', ' : *', ' :  *', ' :        *', ' :                  *', ' :   *', );
 
 is_deeply( $out, \@unlabelledExpected, "Make lines without a dataset object" );
 
 $expected = join( "\n", @unlabelledExpected, '' );
 
-$out = $graph->to_string( [1 .. 4, 10, 20, 5] );
+$out = $graph->to_string( [ 1 .. 4, 10, 20, 5 ] );
 
 is( $out, $expected, "Graph without a dataset object." );
 
@@ -91,7 +79,6 @@ Wednesday : *
  Saturday :                  *
    Sunday :   *
 EOF
-
 
 $graph = Text::Graph->new( 'Line', right => 1 );
 
@@ -229,16 +216,18 @@ Saturday  :   *
 Sunday    :
 EOF
 
-$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
-                                [ qw/Monday Tuesday Wednesday Thursday
-		                     Friday Saturday Sunday/ ]
-				 );
+$dset = Text::Graph::DataSet->new(
+    [ 1000, 20, 30, 40, 100, 200, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 $graph = Text::Graph->new( 'Line', log => 1 );
 
 $out = $graph->to_string( $dset );
 
 is( $out, $expected, "log graph" );
-
 
 # test log chart with data display
 $expected = <<'EOF';
@@ -268,10 +257,13 @@ Saturday  :    *
 Sunday    : *
 EOF
 
-$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
-                                [ qw/Monday Tuesday Wednesday Thursday
-		                     Friday Saturday Sunday/ ]
-				 );
+$dset = Text::Graph::DataSet->new(
+    [ 1000, 20, 30, 40, 100, 200, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 $graph = Text::Graph->new( 'Line', log => 1, minval => 0 );
 
 $out = $graph->to_string( $dset );
@@ -289,10 +281,13 @@ Saturday  :    *
 Sunday    : *
 EOF
 
-$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
-                                [ qw/Monday Tuesday Wednesday Thursday
-		                     Friday Saturday Sunday/ ]
-				 );
+$dset = Text::Graph::DataSet->new(
+    [ 1000, 20, 30, 40, 100, 200, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 $graph = Text::Graph->new( 'Line', log => 1, minval => 1 );
 
 $out = $graph->to_string( $dset );
@@ -310,10 +305,13 @@ Saturday  :    *
 Sunday    : *
 EOF
 
-$dset = Text::Graph::DataSet->new( [1000, 20, 30, 40, 100, 200, 5],
-                                [ qw/Monday Tuesday Wednesday Thursday
-		                     Friday Saturday Sunday/ ]
-				 );
+$dset = Text::Graph::DataSet->new(
+    [ 1000, 20, 30, 40, 100, 200, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 $graph = Text::Graph->new( 'Line', log => 1, minval => 1, maxval => 1000 );
 
 $out = $graph->to_string( $dset );
@@ -331,10 +329,13 @@ Saturday  :         *
 Sunday    :  *
 EOF
 
-$dset = Text::Graph::DataSet->new( [1 .. 4, 10, 20, 5],
-                                   [ qw/Monday Tuesday Wednesday Thursday
-				        Friday Saturday Sunday/ ]
-				 );
+$dset = Text::Graph::DataSet->new(
+    [ 1 .. 4, 10, 20, 5 ],
+    [
+        qw/Monday Tuesday Wednesday Thursday
+            Friday Saturday Sunday/
+    ]
+);
 $graph = Text::Graph->new( 'Line', minval => 2, maxval => 12 );
 
 $out = $graph->to_string( $dset );

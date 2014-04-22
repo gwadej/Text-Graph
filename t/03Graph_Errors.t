@@ -1,7 +1,8 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # Test building graphs with an invalid style.
 
 use strict;
+use warnings;
 use Test::More tests => 1;
 use Data::Dumper;
 
