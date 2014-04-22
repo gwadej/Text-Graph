@@ -1,9 +1,17 @@
 Changes
 lib/Text/Graph.pm
+lib/Text/Graph/DataSet.pm
 Makefile.PL
 MANIFEST			This list of files
 README
 t/00.load.t
-t/local-perlcritic.t
-t/local-pod-coverage.t
-t/local-pod.t
+t/00Graph_config.t
+t/01Graph_Bar.t
+t/02Graph_Line.t
+t/03Graph_Errors.t
+t/Graph-DataSet.t
+t/Graph.t
+xt/critic.t
+xt/hasversion.t
+xt/pod.t
+xt/podcoverage.t
