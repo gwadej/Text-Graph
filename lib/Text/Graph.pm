@@ -43,11 +43,11 @@ sub _initialize
 
     if( 'bar' eq $lstyle )
     {
-        return ( style => 'Bar', marker => '*', line => ' ' );
+        return ( style => 'Bar', marker => '*' );
     }
     elsif( 'line' eq $lstyle )
     {
-        return ( style => 'Line', marker => '*', fill => ' ', line => '.' );
+        return ( style => 'Line', marker => '*', fill => ' ' );
     }
     else
     {
@@ -58,7 +58,6 @@ sub _initialize
 # Data Display Options
 sub get_marker { return $_[0]->{marker}; }
 sub get_fill   { return $_[0]->{fill}; }
-sub get_line   { return $_[0]->{line}; }
 sub is_log     { return $_[0]->{log}; }
 
 # Data Limit Options
@@ -328,10 +327,6 @@ The C<get_marker> method returns the marker associated with this graph.
 
 The C<get_fill> method returns the fill character used for this graph.
 
-=head2 get_line
-
-The C<get_line> method returns the line character used for this graph.
-
 =head2 is_log
 
 The C<is_log> method returns a flag telling whether this is a logarithmic
@@ -479,14 +474,6 @@ Generates the following output:
 
 =head2 Filled Line Graph With Advanced Formatting
 
-  use TextHistogram;
-  TextHistogram::Print( [1,22,43,500,1000,300,50],
-                          labels => [ qw/aaaa bb ccc dddddd ee f ghi/ ],
-                          right  => 1,         # right-justify labels
-                          fill => '.',         # change fill-marker
-                          log => 1,            # logarithmic graph
-                          showval => 1         # show actual values
-                        );
   use Text::Graph;
   use Text::Graph::DataSet;
   my $dataset = Text::Graph::DataSet->new ([1,22,43,500,1000,300,50],
