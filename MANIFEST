@@ -1,16 +1,9 @@
 Changes
-Graph.pm
-Graph/DataSet.pm
+lib/Text/Graph.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 README
-t/00Graph_config.t
-t/01Graph_Bar.t
-t/02Graph_Line.t
-t/03Graph_Errors.t
-t/Graph.t
-t/Graph.t
-t/Graph-DataSet.t
-t/pod.t
-t/pod-coverage.t
-META.yml                                 Module meta-data (added by MakeMaker)
+t/00.load.t
+t/local-perlcritic.t
+t/local-pod-coverage.t
+t/local-pod.t
