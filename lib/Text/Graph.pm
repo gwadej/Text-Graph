@@ -1,257 +1,247 @@
 package Text::Graph;
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 require Exporter;
 
 @ISA = qw(Exporter);
+
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
-@EXPORT = qw(
-	
-);
+@EXPORT  = qw();
 $VERSION = '0.24';
 
-
 sub new
- {
-  my $class = shift;
-  my $style = shift || 'Bar';
+{
+    my $class = shift;
+    my $style = shift || 'Bar';
 
-  my $obj = { _initialize($style),
-              # data display
-	      log       => 0,
-	      # data limit
-	      maxval    => undef,
-	      minval    => undef,
-	      maxlen    => undef,
-	      # graph display
-              separator => ' :',
-	      right     => 0,
-	      showval   => 0,
-              @_
-	    };
-  $obj->{fill} = $obj->{marker} unless defined $obj->{fill};
-  
-  bless $obj, $class;
- }
+    my $obj = {
+        _initialize( $style ),
+
+        # data display
+        log => 0,
+
+        # data limit
+        maxval => undef,
+        minval => undef,
+        maxlen => undef,
+
+        # graph display
+        separator => ' :',
+        right     => 0,
+        showval   => 0,
+        @_
+    };
+    $obj->{fill} = $obj->{marker} unless defined $obj->{fill};
+
+    return bless $obj, $class;
+}
 
 #--------------------------------------------
 #  INTERNAL: Initialize the default parameters based on the supplied
 #  style.
-sub _initialize ($)
- {
-  my $style = shift;
-  my $lstyle = lc $style;
+sub _initialize
+{
+    my $style  = shift;
+    my $lstyle = lc $style;
 
-  if('bar' eq $lstyle)
-   {
-    ( style => 'Bar', marker => '*', line => ' ' );
-   }
-  elsif('line' eq $lstyle)
-   {
-    ( style => 'Line', marker => '*', fill => ' ', line => '.' );
-   }
-  else
-   {
-    die "Unknown style '$style'.\n";
-   }
- }
+    if( 'bar' eq $lstyle )
+    {
+        return ( style => 'Bar', marker => '*', line => ' ' );
+    }
+    elsif( 'line' eq $lstyle )
+    {
+        return ( style => 'Line', marker => '*', fill => ' ', line => '.' );
+    }
+    else
+    {
+        die "Unknown style '$style'.\n";
+    }
+}
 
 # Data Display Options
-sub  get_marker  ($)  { $_[0]->{marker}; }
-sub  get_fill    ($)  { $_[0]->{fill}; }
-sub  get_line    ($)  { $_[0]->{line}; }
-sub  is_log      ($)  { $_[0]->{log}; }
+sub get_marker { return $_[0]->{marker}; }
+sub get_fill   { return $_[0]->{fill}; }
+sub get_line   { return $_[0]->{line}; }
+sub is_log     { return $_[0]->{log}; }
 
 # Data Limit Options
-sub  get_maxlen  ($)  { $_[0]->{maxlen}; }
-sub  get_maxval  ($)  { $_[0]->{maxval}; }
-sub  get_minval  ($)  { $_[0]->{minval}; }
+sub get_maxlen { return $_[0]->{maxlen}; }
+sub get_maxval { return $_[0]->{maxval}; }
+sub get_minval { return $_[0]->{minval}; }
 
 # Graph Display Options
-sub  get_separator ($) { $_[0]->{separator}; }
-sub  is_right_justified ($) { $_[0]->{right}; }
-sub  show_value    ($) { $_[0]->{showval}; }
+sub get_separator      { return $_[0]->{separator}; }
+sub is_right_justified { return $_[0]->{right}; }
+sub show_value         { return $_[0]->{showval}; }
 
+sub make_lines
+{
+    my $self = shift;
+    my $data = _make_graph_data( @_ );
 
-sub  make_lines ($;$)
- {
-  my $self = shift;
-  my $data = _make_graph_data( @_ );
+    my @lines = _histogram( $data, $self );
 
-  my @lines = _histogram( $data, $self );
+    return wantarray ? @lines : \@lines;
+}
 
-  wantarray ? @lines : \@lines;
- }
+sub make_labelled_lines
+{
+    my $self = shift;
+    my $data = _make_graph_data( @_ );
 
+    my @labels = _fmt_labels( $self->{right}, $data->get_labels() );
+    my @lines = $self->make_lines( $data );
+    for ( my $i = 0; $i < @lines; ++$i )
+    {
+        $lines[$i] = $labels[$i] . $self->{separator} . $lines[$i];
+    }
 
-sub  make_labelled_lines ($;$)
- {
-  my $self = shift;
-  my $data = _make_graph_data( @_ );
+    return wantarray ? @lines : \@lines;
+}
 
-  my @labels = _fmt_labels( $self->{right}, $data->get_labels() );
-  my @lines  = $self->make_lines( $data );
-  for(my $i = 0; $i < @lines; ++$i)
-   {
-    $lines[$i] = $labels[$i] . $self->{separator} . $lines[$i];
-   }
+sub to_string
+{
+    my $self = shift;
 
-  wantarray ? @lines : \@lines;
- }
-
-
-sub  to_string ($;$)
- {
-  my $self = shift;
-  
-  join( "\n", $self->make_labelled_lines( @_ ) ) . "\n";
- }
-
-
+    return join( "\n", $self->make_labelled_lines( @_ ) ) . "\n";
+}
 
 #--------------------------------------------
 #  INTERNAL: Convert input parameters to a graph data object as needed.
-sub _make_graph_data (@)
- {
-  if('Text::Graph::DataSet' eq ref $_[0])
-   {
-    return shift;
-   }
-  else
-   {
-    return Text::Graph::DataSet->new( @_ );
-   }
- }
+sub _make_graph_data
+{
+    if( 'Text::Graph::DataSet' eq ref $_[0] )
+    {
+        return shift;
+    }
+    else
+    {
+        return Text::Graph::DataSet->new( @_ );
+    }
+}
 
 #--------------------------------------------
 #  INTERNAL: This routine pads the labels as needed.
-sub _fmt_labels ($@)
- {
-  my $right = shift;
-  my $len   = 0;
-  my @labels;
+sub _fmt_labels
+{
+    my $right = shift;
+    my $len   = 0;
+    my @labels;
 
-  foreach(@_)
-   {
-    $len = length if length > $len;
-   }
+    foreach ( @_ )
+    {
+        $len = length if length > $len;
+    }
 
-  if($right)
-   {
-    @labels = map { (' ' x ($len-length)).$_ } @_;
-   }
-  else
-   {
-    my $pad = ' ' x $len;
+    if( $right )
+    {
+        @labels = map { ( ' ' x ( $len - length ) ) . $_ } @_;
+    }
+    else
+    {
+        my $pad = ' ' x $len;
 
-    @labels = map { substr( ($_.$pad), 0, $len ) } @_;
-   }
+        @labels = map { substr( ( $_ . $pad ), 0, $len ) } @_;
+    }
 
-  @labels;
- }
+    return @labels;
+}
 
 #--------------------------------------------
 #  INTERNAL: This is the workhorse routine that actually builds the
 #  histogram bars.
-sub  _histogram
- {
-  my $dset  = shift;
-  my $parms = { %{$_[0]}, labels => [$dset->get_labels] };
-  my @values;
+sub _histogram
+{
+    my $dset = shift;
+    my $parms = { %{ $_[0] }, labels => [ $dset->get_labels ] };
+    my @values;
 
-  $parms->{fill} ||= $parms->{marker};
+    $parms->{fill} ||= $parms->{marker};
 
-  my @orig = $dset->get_values;
-  if($parms->{log})
-   {
-    @values = map { log } @orig;
+    my @orig = $dset->get_values;
+    if( $parms->{log} )
+    {
+        @values = map { log } @orig;
 
-    $parms->{minval} = 1 if defined $parms->{minval} and !$parms->{minval};
+        $parms->{minval} = 1 if defined $parms->{minval} and !$parms->{minval};
 
-    $parms->{minval} = log $parms->{minval} if $parms->{minval};
-    $parms->{maxval} = log $parms->{maxval} if $parms->{maxval};
-   }
-  else
-   {
-    @values = @orig;
-   }
+        $parms->{minval} = log $parms->{minval} if $parms->{minval};
+        $parms->{maxval} = log $parms->{maxval} if $parms->{maxval};
+    }
+    else
+    {
+        @values = @orig;
+    }
 
+    unless( defined( $parms->{minval} ) and defined( $parms->{maxval} ) )
+    {
+        my ( $min, $max ) = _minmax( \@values );
+        $parms->{minval} = $min unless defined $parms->{minval};
+        $parms->{maxval} = $max unless defined $parms->{maxval};
+    }
 
-  unless(defined($parms->{minval}) and defined($parms->{maxval}))
-   {
-    my ($min,$max) = _minmax( \@values );
-    $parms->{minval} = $min unless defined $parms->{minval};
-    $parms->{maxval} = $max unless defined $parms->{maxval};
-   }
+    $parms->{maxlen} = $parms->{maxval} - $parms->{minval} + 1
+        unless defined $parms->{maxlen};
+    my $scale = $parms->{maxlen} / ( $parms->{maxval} - $parms->{minval} + 1 );
 
-  $parms->{maxlen} = $parms->{maxval} - $parms->{minval} + 1
-                                    unless defined $parms->{maxlen};
-  my $scale = $parms->{maxlen}/($parms->{maxval} - $parms->{minval} + 1);
+    @values =
+        map { _makebar( ( $_ - $parms->{minval} ) * $scale, $parms->{marker}, $parms->{fill} ) }
+        map { _make_within( $_, $parms->{minval}, $parms->{maxval} ) } @values;
 
-  @values = map { _makebar( ($_-$parms->{minval})*$scale, 
-                            $parms->{marker}, 
-                            $parms->{fill} )
-                }
-            map { _make_within( $_, $parms->{minval}, $parms->{maxval} ) } 
-            @values;
+    if( $parms->{showval} )
+    {
+        foreach ( 0 .. $#values )
+        {
+            $values[$_] .=
+                ( ' ' x ( $parms->{maxlen} - length $values[$_] ) ) . '  (' . $orig[$_] . ')';
+        }
+    }
 
-  if($parms->{showval})
-   {
-    foreach(0..$#values)
-     {
-      $values[$_] .= (' ' x ($parms->{maxlen}-length $values[$_]))
-	             .'  ('. $orig[$_] . ')';
-     }
-   }
-
-  @values;
- }
-
+    return @values;
+}
 
 #--------------------------------------------
 #  INTERNAL: This routine finds both the minimum and maximum of
 #  an array of values.
-sub  _minmax
- {
-  my $list = shift;
-  my ($min, $max);
+sub _minmax
+{
+    my $list = shift;
+    my ( $min, $max );
 
-  $min = $max = $list->[0];
+    $min = $max = $list->[0];
 
-  foreach(@{$list})
-   {
-    if($_ > $max)    {$max = $_;}
-    elsif($_ < $min) {$min = $_;}
-   }
+    foreach ( @{$list} )
+    {
+        if( $_ > $max )    { $max = $_; }
+        elsif( $_ < $min ) { $min = $_; }
+    }
 
-  ($min, $max);
- }
-
-
+    return ( $min, $max );
+}
 
 #--------------------------------------------
 #  INTERNAL: This routine expects a number, a minimum, and a maximum.
 #  It returns a number with the range.
 sub _make_within
- {
-  ($_[0]<$_[1]) ? $_[1] : ($_[0]>$_[2] ? $_[2] : $_[0]);
- }
-
+{
+    return ( $_[0] < $_[1] ) ? $_[1] : ( $_[0] > $_[2] ? $_[2] : $_[0] );
+}
 
 #--------------------------------------------
 #  INTERNAL: This routine builds the actual histogram bar.
-sub  _makebar
- {
-  my ($val, $m, $f, $s) = @_;
+sub _makebar
+{
+    my ( $val, $m, $f, $s ) = @_;
 
-  $val = int($val + 0.5);
+    $val = int( $val + 0.5 );
 
-  $val>0 ? (($f x ($val-1)) . $m) : '';
- }
+    return $val > 0 ? ( ( $f x ( $val - 1 ) ) . $m ) : '';
+}
 
 1;
 
@@ -276,10 +266,6 @@ representation.
 The Text::Graph module provides a simple text-based graph of a dataset.
 Although this approach is B<not> appropriate for all data analysis, it can be
 useful in some cases.
-
-=head1 AUTHOR
-
-G. Wade Johnson, wade@anomaly.org
 
 =head1 Functions
 
@@ -535,9 +521,13 @@ Generates the following output:
 
 perl(1).
 
+=head1 AUTHOR
+
+G. Wade Johnson, gwadej@cpan.org
+
 =head1 COPYRIGHT
 
-Copyright 2002-2004 G. Wade Johnson
+Copyright 2002-20014 G. Wade Johnson
 
 This module is free software; you can distribute it and/or modify it under
 the same terms as Perl itself.

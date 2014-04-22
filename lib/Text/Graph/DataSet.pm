@@ -1,104 +1,102 @@
 package Text::Graph::DataSet;
 
 use strict;
+use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 require Exporter;
 
 @ISA = qw(Exporter);
+
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
-@EXPORT = qw(
-	
-);
+@EXPORT = qw();
+
 $VERSION = '0.21';
 
-
 sub new
- {
-  my $class = shift;
-  my $obj = {
-              values => [],
-	      labels => undef,
-	      hash   => undef,
-	      sort   => sub { sort @_ }
-	    };
+{
+    my $class = shift;
+    my $obj   = {
+        values => [],
+        labels => undef,
+        hash   => undef,
+        sort   => sub { sort @_ }
+    };
 
-  if(@_)
-   {
-    if('ARRAY' eq ref $_[0])
-     {
-      $obj->{values} = shift;
-     }
-    elsif('HASH' eq ref $_[0])
-     {
-      $obj->{hash}   = shift;
-     }
-    $obj->{labels} = shift if 'ARRAY' eq ref $_[0];
-   }
+    if( @_ )
+    {
+        if( 'ARRAY' eq ref $_[0] )
+        {
+            $obj->{values} = shift;
+        }
+        elsif( 'HASH' eq ref $_[0] )
+        {
+            $obj->{hash} = shift;
+        }
+        $obj->{labels} = shift if 'ARRAY' eq ref $_[0];
+    }
 
-  if(@_)
-   {
-    die "Odd number of parameters to new.\n" unless 0 == (@_ % 2);
-    $obj = { %$obj, @_ };
-   }
+    if( @_ )
+    {
+        die "Odd number of parameters to new.\n" unless 0 == ( @_ % 2 );
+        $obj = { %{$obj}, @_ };
+    }
 
-  $obj = bless $obj, $class;
+    $obj = bless $obj, $class;
 
-  $obj->_initialize();
+    $obj->_initialize();
 
-  $obj;
- }
+    return $obj;
+}
 
+sub get_values
+{
+    my $self = shift;
 
-sub get_values ($)
- {
-  my $self = shift;
+    return wantarray ? @{ $self->{values} } : $self->{values};
+}
 
-  wantarray ? @{$self->{values}} : $self->{values};
- }
+sub get_labels
+{
+    my $self = shift;
 
+    return wantarray ? @{ $self->{labels} } : $self->{labels};
+}
 
-sub get_labels ($)
- {
-  my $self = shift;
-  
-  wantarray ? @{$self->{labels}} : $self->{labels};
- }
+sub _initialize
+{
+    my $self = shift;
 
+    if( defined $self->{hash} )
+    {
+        unless( defined $self->{labels} )
+        {
+            if( defined $self->{sort} )
+            {
+                $self->{labels} = [ $self->{sort}->( keys %{ $self->{hash} } ) ];
+            }
+            else
+            {
+                $self->{labels} = [ keys %{ $self->{hash} } ];
+            }
+        }
 
-sub _initialize ($)
- {
-  my $self = shift;
+        $self->{values} = [ @{ $self->{hash} }{ @{ $self->{labels} } } ];
+    }
+    elsif( !defined $self->{labels} )
+    {
+        $self->{labels} = [ ( '' ) x scalar( @{ $self->{values} } ) ];
+    }
 
-  if(defined $self->{hash})
-   {
-    unless(defined $self->{labels})
-     {
-      if(defined $self->{sort})
-       {
-        $self->{labels} = [ $self->{sort}->( keys %{$self->{hash}} ) ];
-       }
-      else
-       {
-        $self->{labels} = [ keys %{$self->{hash}} ];
-       }
-     }
-     
-    $self->{values} = [ @{$self->{hash}}{@{$self->{labels}}} ];
-   }
-  elsif(!defined $self->{labels})
-   {
-    $self->{labels} = [ ('') x scalar(@{$self->{values}}) ];
-   }
-
-  if(scalar @{$self->{values}} > scalar @{$self->{labels}})
-   {
-    push @{$self->{labels}},
-         ('') x (scalar @{$self->{values}} - scalar @{$self->{labels}});
-   }
- }
+    if( scalar @{ $self->{values} } > scalar @{ $self->{labels} } )
+    {
+        push @{ $self->{labels} },
+            ( '' ) x ( scalar @{ $self->{values} } - scalar @{ $self->{labels} } );
+    }
+    return;
+}
 
 1;
 __END__
@@ -180,11 +178,11 @@ the labels in this data set. In list context, it returns the labels as a list.
 
 =head1 AUTHOR
 
-G. Wade Johnson, wade@anomaly.org
+G. Wade Johnson, gwadej@cpan.org
 
 =head1 COPYRIGHT
 
-Copyright 2004 G. Wade Johnson
+Copyright 2004-2014 G. Wade Johnson
 
 This module is free software; you can distribute it and/or modify it under
 the same terms as Perl itself.
