@@ -1,17 +1,22 @@
 Revision history for Text::Graph.
 
-0.23  Sun Jun  5 00:43 2005
-        - Corrected Change log. (Shouldn't do updates at this time of night.)
-0.22  Sun Jun  5 00:40 2005
-        - Added testing for POD docs.
-0.21  Wed Feb 16 18:25 2005
-	- Corrected the creation of the distribution file.
-0.2   Mon Feb 14 22:47 2005
-	- Achieved full coverage on tests.
-        - Added messages to all tests.
-	- Removed some 'can't happen' cases in the code
-0.1   Sun Jun  6 11:09 2004
-	- First version released on CPAN
-0.01  Sat Jun  5 10:17 2004
-	- original version; created by h2xs 1.19
+0.50  2014-04-22T22:40-0500
+  - Modernize the layout of the module.
+  - Modernize the code.
+  - Remove unused get_line method.
+  - Fix missing dependency on Text::Graph::DataSet, with test.
+0.23  2005-06-05T00:43-0500
+  - Corrected Change log. (Shouldn't do updates at this time of night.)
+0.22  2005-06-05T00:40-0500
+  - Added testing for POD docs.
+0.21  2005-02-16T18:25-0600
+  - Corrected the creation of the distribution file.
+0.2   2005-02-14T22:47-0600
+  - Achieved full coverage on tests.
+  - Added messages to all tests.
+  - Removed some 'can't happen' cases in the code
+0.1   2004-06-06T11:09-0500
+  - First version released on CPAN
+0.01  2004-06-05T10:17-0500
+  - original version; created by h2xs 1.19
 
