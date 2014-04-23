@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Text::Graph::DataSet;
 
-our $VERSION = '0.24';
+our $VERSION = '0.50';
 
 sub new
 {
@@ -87,7 +87,7 @@ sub make_labelled_lines
 
     my @labels = _fmt_labels( $self->{right}, $data->get_labels() );
     my @lines = $self->make_lines( $data );
-    for ( my $i = 0; $i < @lines; ++$i )
+    foreach my $i ( 0 .. $#lines )
     {
         $lines[$i] = $labels[$i] . $self->{separator} . $lines[$i];
     }
@@ -124,14 +124,14 @@ sub _fmt_labels
     my $len   = 0;
     my @labels;
 
-    foreach ( @_ )
+    foreach my $label ( @_ )
     {
-        $len = length if length > $len;
+        $len = length $label if length $label > $len;
     }
 
     if( $right )
     {
-        @labels = map { ( ' ' x ( $len - length ) ) . $_ } @_;
+        @labels = map { ( ' ' x ( $len - length $_ ) ) . $_ } @_;
     }
     else
     {
@@ -148,8 +148,8 @@ sub _fmt_labels
 #  histogram bars.
 sub _histogram
 {
-    my $dset = shift;
-    my $parms = { %{ $_[0] }, labels => [ $dset->get_labels ] };
+    my ($dset, $args) = @_;
+    my $parms = { %{$args}, labels => [ $dset->get_labels ] };
     my @values;
 
     $parms->{fill} ||= $parms->{marker};
@@ -186,10 +186,10 @@ sub _histogram
 
     if( $parms->{showval} )
     {
-        foreach ( 0 .. $#values )
+        foreach my $i ( 0 .. $#values )
         {
-            $values[$_] .=
-                ( ' ' x ( $parms->{maxlen} - length $values[$_] ) ) . '  (' . $orig[$_] . ')';
+            $values[$i] .=
+                ( ' ' x ( $parms->{maxlen} - length $values[$i] ) ) . '  (' . $orig[$i] . ')';
         }
     }
 
@@ -506,7 +506,7 @@ G. Wade Johnson, gwadej@cpan.org
 
 =head1 COPYRIGHT
 
-Copyright 2002-20014 G. Wade Johnson
+Copyright 2002-2014 G. Wade Johnson
 
 This module is free software; you can distribute it and/or modify it under
 the same terms as Perl itself.
