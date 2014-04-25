@@ -54,8 +54,8 @@ sub test_dataset
     is( $graph->to_string( $dset ), $expected, "Default Bar graph" );
 }
 
-# test right-justified labels
 {
+    # test right-justified labels
     my $graph = Text::Graph->new( 'Bar', right => 1 );
 
     my $expected = <<'EOF';
