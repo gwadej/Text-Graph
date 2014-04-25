@@ -2,10 +2,9 @@
 
 use strict;
 use warnings;
-use Test::More tests => 13;
-use Data::Dumper;
+use Test::More tests => 11;
 
-BEGIN { use_ok( 'Text::Graph' ); }
+use Text::Graph;
 
 can_ok(
     'Text::Graph', qw(new get_marker get_fill is_log
@@ -16,9 +15,8 @@ can_ok(
 
 # test default construction
 my $graph = Text::Graph->new();
-
-ok( defined $graph, "default constructed" );
 isa_ok( $graph, 'Text::Graph' );
+
 is( $graph->get_marker, '*', "Default marker" );
 is( $graph->get_fill,   '*', "Default fill" );
 
