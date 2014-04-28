@@ -3,7 +3,7 @@ package Text::Graph::DataSet;
 use strict;
 use warnings;
 
-our $VERSION = '0.21';
+our $VERSION = '0.50';
 
 sub new
 {
@@ -94,6 +94,10 @@ __END__
 =head1 NAME
 
 Text::Graph::Data - Encapsulate data for Text::Graph
+
+=head1 VERSION
+
+This document describes "Text::Graph::Data" version 0.50.
 
 =head1 SYNOPSIS
 

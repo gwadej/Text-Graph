@@ -17,12 +17,13 @@ WriteMakefile(
     clean               => { FILES => 'Text-Graph-*' },
     META_MERGE          => {
         'meta-spec' => { version => 2 },
-       resources => {
-           repository => {
-               type => 'git',
-               url  => 'https://github.com/gwadej/Text-Graph.git',
-               web  => 'https://github.com/gwadej/Text-Graph',
-       },
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/gwadej/Text-Graph.git',
+                web  => 'https://github.com/gwadej/Text-Graph',
+            },
+        },
     },
     test               => {
         TESTS => 't/*.t xt/*.t',

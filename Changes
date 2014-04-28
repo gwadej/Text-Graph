@@ -1,6 +1,6 @@
 Revision history for Text::Graph.
 
-0.50  2014-04-28T18:30-0500
+0.50  2014-04-28T18:40-0500
   - Modernize the layout of the module.
   - Modernize the code.
   - Remove unused get_line method.

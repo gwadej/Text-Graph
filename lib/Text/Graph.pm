@@ -242,6 +242,10 @@ __END__
 
 Text::Graph - Perl module for generating simple text-based graphs.
 
+=head1 VERSION
+
+This document describes "Text::Graph" version 0.50.
+
 =head1 SYNOPSIS
 
   use Text::Graph;
