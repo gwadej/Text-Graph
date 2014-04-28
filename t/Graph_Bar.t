@@ -21,17 +21,19 @@ sub test_dataset
 }
 
 {
+    my $label = 'Default Bars';
     my $graph = Text::Graph->new( 'Bar' );
 
     my @expected = ( '', '*', '**', '***', '*********', '*******************', '****', );
 
     my $out = $graph->make_lines( test_dataset() );
 
-    is_deeply( $out, \@expected, "Default Bars" )
+    is_deeply( $out, \@expected, $label )
         or note explain $out;
 }
 
 {
+    my $label = 'Default Bar graph';
     my $graph = Text::Graph->new( 'Bar' );
 
     my @expected = (
@@ -47,15 +49,15 @@ sub test_dataset
     my $dset = test_dataset();
     my $out = $graph->make_labelled_lines( $dset );
 
-    is_deeply( $out, \@expected, "Default Bar graph" )
+    is_deeply( $out, \@expected, "$label: lines" )
         or note explain $out;
 
     my $expected = join( "\n", @expected, '' );
-    is( $graph->to_string( $dset ), $expected, "Default Bar graph" );
+    is( $graph->to_string( $dset ), $expected, "$label: full graph" );
 }
 
 {
-    # test right-justified labels
+    my $label = 'right-justified labels';
     my $graph = Text::Graph->new( 'Bar', right => 1 );
 
     my $expected = <<'EOF';
@@ -67,11 +69,11 @@ Wednesday :**
  Saturday :*******************
    Sunday :****
 EOF
-    is( $graph->to_string( test_dataset() ), $expected, "right justified labels" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test different separator
+    my $label    = 'Different label separator';
     my $expected = <<'EOF';
 Monday   |
 Tuesday  |*
@@ -83,27 +85,28 @@ Sunday   |****
 EOF
 
     my $graph = Text::Graph->new( 'Bar', separator => '|' );
-    is( $graph->to_string( test_dataset() ), $expected, "different separator" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
+    my $label = 'showing values';
     # test showing values
     my $expected = <<'EOF';
-Monday    :                      (1)
-Tuesday   :*                     (2)
-Wednesday :**                    (3)
-Thursday  :***                   (4)
-Friday    :*********             (10)
-Saturday  :*******************   (20)
-Sunday    :****                  (5)
+Monday    :                     (1)
+Tuesday   :*                    (2)
+Wednesday :**                   (3)
+Thursday  :***                  (4)
+Friday    :*********            (10)
+Saturday  :*******************  (20)
+Sunday    :****                 (5)
 EOF
 
     my $graph = Text::Graph->new( 'Bar', showval => 1 );
-    is( $graph->to_string( test_dataset() ), $expected, "showing values" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test different marker
+    my $label = 'Different Marker';
     my $expected = <<'EOF';
 Monday    :
 Tuesday   :#
@@ -115,11 +118,11 @@ Sunday    :####
 EOF
 
     my $graph = Text::Graph->new( 'Bar', marker => '#' );
-    is( $graph->to_string( test_dataset() ), $expected, "# as marker" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test different fill
+    my $label = 'Different Fill';
     my $expected = <<'EOF';
 Monday    :
 Tuesday   :*
@@ -131,11 +134,11 @@ Sunday    :###*
 EOF
 
     my $graph = Text::Graph->new( 'Bar', fill => '#' );
-    is( $graph->to_string( test_dataset() ), $expected, "# as fill" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test min/max value
+    my $label ='Min/Max values supplied';
     my $expected = <<'EOF';
 Monday    :*
 Tuesday   :**
@@ -147,27 +150,27 @@ Sunday    :*****
 EOF
 
     my $graph = Text::Graph->new( 'Bar', minval => 0, maxval => 15 );
-    is( $graph->to_string( test_dataset() ), $expected, "min/max values" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test max len
+    my $label = 'Limit Max length';
     my $expected = <<'EOF';
-Monday    :
+Monday    :*
 Tuesday   :*
-Wednesday :*
+Wednesday :**
 Thursday  :**
 Friday    :*****
 Saturday  :**********
-Sunday    :**
+Sunday    :***
 EOF
 
     my $graph = Text::Graph->new( 'Bar', minval => 0, maxlen => 10 );
-    is( $graph->to_string( test_dataset() ), $expected, "showing values" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test maxval
+    my $label = 'Supplied maxval only';
     my $expected = <<'EOF';
 Monday    :
 Tuesday   :*
@@ -179,11 +182,11 @@ Sunday    :****
 EOF
 
     my $graph = Text::Graph->new( 'Bar', maxval => 20 );
-    is( $graph->to_string( test_dataset() ), $expected, "maxval only" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
 
 {
-    # test log chart
+    my $label ='Log graph';
     my $expected = <<'EOF';
 Monday    :*****
 Tuesday   :*
@@ -202,19 +205,19 @@ EOF
         ]
     );
     my $graph = Text::Graph->new( 'Bar', log => 1 );
-    is( $graph->to_string( $dset ), $expected, "log graph" );
+    is( $graph->to_string( $dset ), $expected, $label );
 }
 
 {
-    # test log chart with data display
+    my $label ='Log graph, with values';
     my $expected = <<'EOF';
-Monday    :*****   (1000)
-Tuesday   :*       (20)
-Wednesday :**      (30)
-Thursday  :**      (40)
-Friday    :***     (100)
-Saturday  :****    (200)
-Sunday    :        (5)
+Monday    :*****  (1000)
+Tuesday   :*      (20)
+Wednesday :**     (30)
+Thursday  :**     (40)
+Friday    :***    (100)
+Saturday  :****   (200)
+Sunday    :       (5)
 EOF
 
     my $dset = Text::Graph::DataSet->new(
@@ -225,11 +228,11 @@ EOF
         ]
     );
     my $graph = Text::Graph->new( 'Bar', log => 1, showval => 1 );
-    is( $graph->to_string( $dset ), $expected, "log graph, showing values" );
+    is( $graph->to_string( $dset ), $expected, $label );
 }
 
 {
-    # test log chart with 0 minval
+    my $label ='Log graph, with 0 minval';
     my $expected = <<'EOF';
 Monday    :*******
 Tuesday   :***
@@ -248,11 +251,11 @@ EOF
         ]
     );
     my $graph = Text::Graph->new( 'Bar', log => 1, minval => 0 );
-    is( $graph->to_string( $dset ), $expected, "log graph, 0 minval" );
+    is( $graph->to_string( $dset ), $expected, $label );
 }
 
 {
-    # test log chart with 1 minval
+    my $label ='Log graph, with 1 minval';
     my $expected = <<'EOF';
 Monday    :*******
 Tuesday   :***
@@ -271,27 +274,27 @@ EOF
         ]
     );
     my $graph = Text::Graph->new( 'Bar', log => 1, minval => 1 );
-    is( $graph->to_string( $dset ), $expected, "log graph, 1 minval" );
+    is( $graph->to_string( $dset ), $expected, $label );
 }
 
 {
-    # Raw numbers, not a dataset
+    my $label = 'Not a dataset';
     my $graph = Text::Graph->new( 'Bar' );
     my @unlabelledExpected =
         ( ' :', ' :*', ' :**', ' :***', ' :*********', ' :*******************', ' :****', );
 
     my $out = $graph->make_labelled_lines( [ 1 .. 4, 10, 20, 5 ] );
 
-    is_deeply( $out, \@unlabelledExpected, "Not a dataset" )
+    is_deeply( $out, \@unlabelledExpected, "$label: lines" )
         or note explain $out;
 
     my $expected = join( "\n", @unlabelledExpected, '' );
     $out = $graph->to_string( [ 1 .. 4, 10, 20, 5 ] );
-    is( $out, $expected, "Not a dataset" );
+    is( $out, $expected, "$label: full graph" );
 }
 
 {
-    # No fill
+    my $label = 'No fill';
     my $graph = Text::Graph->new( 'Bar', fill => '' );
     my $dset = Text::Graph::DataSet->new(
         [ 1 .. 4, 10, 20, 5 ],
@@ -311,15 +314,15 @@ EOF
     );
 
     my $out = $graph->make_labelled_lines( $dset );
-    is_deeply( $out, \@expected, "No fill" )
+    is_deeply( $out, \@expected, "$label: lines" )
         or note explain $out;
 
     my $expected = join( "\n", @expected, '' );
-    is( $graph->to_string( $dset ), $expected, "No Fill" );
+    is( $graph->to_string( $dset ), $expected, "$label: full graph" );
 }
 
 {
-    # No fill, no marker
+    my $label = 'No fill, no marker';
     my $graph = Text::Graph->new( 'Bar', fill => '', marker => '' );
     my $dset = test_dataset();
     my @expected = (
@@ -334,15 +337,15 @@ EOF
 
     my $out = $graph->make_labelled_lines( $dset );
 
-    is_deeply( $out, \@expected, "No fill or marker" )
+    is_deeply( $out, \@expected, "$label: lines" )
         or note explain $out;
 
     my $expected = join( "\n", @expected, '' );
-    is( $graph->to_string( $dset ), $expected, "No Fill or marker" );
+    is( $graph->to_string( $dset ), $expected, "$label: full graph" );
 }
 
 {
-    # test log chart with 1 minval and 1000 maxval
+    my $label = 'Log graph, with min and max';
     my $expected = <<'EOF';
 Monday    :*******
 Tuesday   :***
@@ -361,11 +364,11 @@ EOF
         ]
     );
     my $graph = Text::Graph->new( 'Bar', log => 1, minval => 1, maxval => 1000 );
-    is( $graph->to_string( $dset ), $expected, "log graph, minval and maxval" );
+    is( $graph->to_string( $dset ), $expected, $label );
 }
 
 {
-    # test clip both ends of range
+    my $label = 'Clip both ends of range';
     my $expected = <<'EOF';
 Monday    :
 Tuesday   :
@@ -377,5 +380,5 @@ Sunday    :***
 EOF
 
     my $graph = Text::Graph->new( 'Bar', minval => 2, maxval => 12 );
-    is( $graph->to_string( test_dataset() ), $expected, "clip both ends" );
+    is( $graph->to_string( test_dataset() ), $expected, $label );
 }
