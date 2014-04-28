@@ -176,9 +176,9 @@ sub _histogram
         $parms->{maxval} = $max unless defined $parms->{maxval};
     }
 
-    $parms->{maxlen} = $parms->{maxval} - $parms->{minval} + 1
+    $parms->{maxlen} = $parms->{maxval} - $parms->{minval}
         unless defined $parms->{maxlen};
-    my $scale = $parms->{maxlen} / ( $parms->{maxval} - $parms->{minval} + 1 );
+    my $scale = $parms->{maxlen} / ( $parms->{maxval} - $parms->{minval} );
 
     @values =
         map { _makebar( ( $_ - $parms->{minval} ) * $scale, $parms->{marker}, $parms->{fill} ) }
