@@ -1,10 +1,14 @@
 Revision history for Text::Graph.
 
-0.50  2014-04-22T22:40-0500
+0.50  2014-04-28T18:30-0500
   - Modernize the layout of the module.
   - Modernize the code.
   - Remove unused get_line method.
   - Fix missing dependency on Text::Graph::DataSet, with test.
+  - Code printed the data ignoring the minimum value, but calculated
+    the length including it. I had intended the inclusion, but making the
+    length calculation match the print was easier.
+  - Thanks to Jerry D. Hedden for pointing out the previous 3 errors.
 0.23  2005-06-05T00:43-0500
   - Corrected Change log. (Shouldn't do updates at this time of night.)
 0.22  2005-06-05T00:40-0500

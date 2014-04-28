@@ -240,7 +240,7 @@ __END__
 
 =head1 NAME
 
-Text::Graph - Perl extension for generating text-based graphs.
+Text::Graph - Perl module for generating simple text-based graphs.
 
 =head1 SYNOPSIS
 
@@ -499,6 +499,11 @@ Generates the following output:
 =head1 SEE ALSO
 
 perl(1).
+
+=head1 ACKNOWLEDMENTS
+
+Thanks to Jerry D. Hedden for pointing out a few inconsistencies in the code.
+Sorry for taking so long to get back to the module to fix it.
 
 =head1 AUTHOR
 
