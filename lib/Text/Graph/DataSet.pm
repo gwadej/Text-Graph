@@ -2,91 +2,79 @@ package Text::Graph::DataSet;
 
 use strict;
 use warnings;
+use Moo;
+use namespace::clean;
 
-our $VERSION = '0.50';
+our $VERSION = '0.75';
 
-sub new
+has values => (
+    is     => 'ro',
+    reader => 'get_values',
+);
+has labels => (
+    is     => 'ro',
+    reader => 'get_labels',
+);
+
+#
+# This routine is quite complicated to support the bizarre interface that I
+# originally supported.
+sub BUILDARGS
 {
-    my $class = shift;
-    my $obj   = {
-        values => [],
-        labels => undef,
-        hash   => undef,
-        sort   => sub { sort @_ }
-    };
+    my ( $class, @args ) = @_;
+    return { values => [], labels => [] } if !@args;
+    my ( $values, $labels, $hash ) = ( [], undef, undef );
 
-    if( @_ )
+    if( ref $args[0] eq ref [] )
     {
-        if( 'ARRAY' eq ref $_[0] )
+        $values = shift @args;
+        if( ref $args[0] eq ref [] )
         {
-            $obj->{values} = shift;
+            $labels = shift @args;
         }
-        elsif( 'HASH' eq ref $_[0] )
+    }
+    elsif( ref $args[0] eq ref {} )
+    {
+        $hash = shift @args;
+        if( ref $args[0] eq ref [] )
         {
-            $obj->{hash} = shift;
+            $labels = shift @args;
         }
-        $obj->{labels} = shift if 'ARRAY' eq ref $_[0];
     }
-
-    if( @_ )
+    die "Odd number of parameters to new.\n" if @args % 2 == 1;
+    my %real_args = ( sort => sub { sort @_ }, @args );
+    my $sortref = delete $real_args{sort};
+    $hash ||= delete $real_args{hash};
+    if( defined $hash )
     {
-        die "Odd number of parameters to new.\n" unless 0 == ( @_ % 2 );
-        $obj = { %{$obj}, @_ };
-    }
-
-    $obj = bless $obj, $class;
-
-    $obj->_initialize();
-
-    return $obj;
-}
-
-sub get_values
-{
-    my $self = shift;
-
-    return wantarray ? @{ $self->{values} } : $self->{values};
-}
-
-sub get_labels
-{
-    my $self = shift;
-
-    return wantarray ? @{ $self->{labels} } : $self->{labels};
-}
-
-sub _initialize
-{
-    my $self = shift;
-
-    if( defined $self->{hash} )
-    {
-        unless( defined $self->{labels} )
+        if( $sortref )
         {
-            if( defined $self->{sort} )
-            {
-                $self->{labels} = [ $self->{sort}->( keys %{ $self->{hash} } ) ];
-            }
-            else
-            {
-                $self->{labels} = [ keys %{ $self->{hash} } ];
-            }
+            my ( $pkg ) = caller;
+            $labels ||= [ $sortref->( keys %{$hash} ) ] if !$labels;
         }
-
-        $self->{values} = [ @{ $self->{hash} }{ @{ $self->{labels} } } ];
+        else
+        {
+            $labels ||= [ keys %{$hash} ];
+        }
+        $values = [ @{$hash}{ @{$labels} } ];
+        $hash   = undef;
     }
-    elsif( !defined $self->{labels} )
-    {
-        $self->{labels} = [ ( '' ) x scalar( @{ $self->{values} } ) ];
-    }
-
-    if( scalar @{ $self->{values} } > scalar @{ $self->{labels} } )
-    {
-        push @{ $self->{labels} },
-            ( '' ) x ( scalar @{ $self->{values} } - scalar @{ $self->{labels} } );
-    }
-    return;
+    $labels ||= [];
+    push @{$labels}, ( '' ) x ( @{$values} - @{$labels} ) if @{$values} > @{$labels};
+    return { values => $values, labels => $labels, %real_args };
 }
+
+#
+# Support the list or array ref original interface.
+sub _list_or_ref
+{
+    my ( $orig, $self ) = @_;
+    my $val = $orig->( $self );
+    return wantarray ? @{$val} : $val;
+}
+
+around 'get_values' => \&_list_or_ref;
+around 'get_labels' => \&_list_or_ref;
 
 1;
 __END__

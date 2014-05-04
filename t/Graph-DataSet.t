@@ -60,13 +60,13 @@ can_ok( 'Text::Graph::DataSet', qw(new get_values get_labels) );
         or note explain $lbls;
 
     # test get_values
-    isa_ok( scalar $dset->get_values(), 'ARRAY', "get_values in scalar context" );
+    isa_ok( scalar $dset->get_values(), 'ARRAY', "get_values in list context" );
     my @vals = $dset->get_values();
     is_deeply( \@vals, $vals, "same values" )
         or note explain \@vals;
 
     # test get_labels
-    isa_ok( scalar $dset->get_labels(), 'ARRAY', "get_labels in scalar context" );
+    isa_ok( scalar $dset->get_labels(), 'ARRAY', "get_labels in list context" );
     my @lbls = $dset->get_labels();
     is_deeply( \@lbls, $lbls, "same labels" )
         or note explain \@lbls;
