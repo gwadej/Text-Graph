@@ -1,5 +1,8 @@
 Revision history for Text::Graph.
 
+0.75  2014-05-05T15:10-0500
+  - Convert Text::Graph::DataSet to Moo.
+  - Convert Text::Graph to Moo.
 0.50  2014-04-28T18:40-0500
   - Modernize the layout of the module.
   - Modernize the code.

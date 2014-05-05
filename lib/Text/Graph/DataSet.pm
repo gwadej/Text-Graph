@@ -85,7 +85,7 @@ Text::Graph::Data - Encapsulate data for Text::Graph
 
 =head1 VERSION
 
-This document describes "Text::Graph::Data" version 0.50.
+This document describes "Text::Graph::Data" version 0.75.
 
 =head1 SYNOPSIS
 

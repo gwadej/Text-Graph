@@ -2,14 +2,61 @@ package Text::Graph;
 
 use strict;
 use warnings;
+use Moo;
+use namespace::clean;
+
 use Text::Graph::DataSet;
 
-our $VERSION = '0.50';
+our $VERSION = '0.75';
 
-sub new
+has style => (
+    is     => 'ro',
+    reader => '_style',
+);
+# Data Display properties
+has marker => (
+    is     => 'ro',
+    reader => 'get_marker',
+);
+has fill => (
+    is     => 'ro',
+    reader => 'get_fill',
+);
+has log => (
+    is     => 'ro',
+    reader => 'is_log',
+);
+# Data Limit Properties
+has maxval => (
+    is     => 'ro',
+    reader => 'get_maxval',
+);
+has minval => (
+    is     => 'ro',
+    reader => 'get_minval',
+);
+has maxlen => (
+    is     => 'ro',
+    reader => 'get_maxlen',
+);
+# Graph Display Options
+has separator => (
+    is     => 'ro',
+    reader => 'get_separator',
+);
+has right => (
+    is     => 'ro',
+    reader => 'is_right_justified',
+);
+has showval => (
+    is     => 'ro',
+    reader => 'show_value',
+);
+
+sub BUILDARGS
 {
-    my $class = shift;
-    my $style = shift || 'Bar';
+    my ( $class, @args ) = @_;
+    my $style = shift( @args ) || 'Bar';
 
     my $obj = {
         _initialize( $style ),
@@ -26,11 +73,11 @@ sub new
         separator => ' :',
         right     => 0,
         showval   => 0,
-        @_
+        @args
     };
     $obj->{fill} = $obj->{marker} unless defined $obj->{fill};
 
-    return bless $obj, $class;
+    return $obj;
 }
 
 #--------------------------------------------
@@ -54,21 +101,6 @@ sub _initialize
         die "Unknown style '$style'.\n";
     }
 }
-
-# Data Display Options
-sub get_marker { return $_[0]->{marker}; }
-sub get_fill   { return $_[0]->{fill}; }
-sub is_log     { return $_[0]->{log}; }
-
-# Data Limit Options
-sub get_maxlen { return $_[0]->{maxlen}; }
-sub get_maxval { return $_[0]->{maxval}; }
-sub get_minval { return $_[0]->{minval}; }
-
-# Graph Display Options
-sub get_separator      { return $_[0]->{separator}; }
-sub is_right_justified { return $_[0]->{right}; }
-sub show_value         { return $_[0]->{showval}; }
 
 sub make_lines
 {
@@ -148,7 +180,7 @@ sub _fmt_labels
 #  histogram bars.
 sub _histogram
 {
-    my ($dset, $args) = @_;
+    my ( $dset, $args ) = @_;
     my $parms = { %{$args}, labels => [ $dset->get_labels ] };
     my @values;
 
@@ -244,7 +276,7 @@ Text::Graph - Perl module for generating simple text-based graphs.
 
 =head1 VERSION
 
-This document describes "Text::Graph" version 0.50.
+This document describes "Text::Graph" version 0.75.
 
 =head1 SYNOPSIS
 
