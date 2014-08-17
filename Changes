@@ -1,5 +1,7 @@
 Revision history for Text::Graph.
 
+???? ?????????????
+  - Add perl version check to the author tests.
 0.75  2014-05-05T15:10-0500
   - Convert Text::Graph::DataSet to Moo.
   - Convert Text::Graph to Moo.

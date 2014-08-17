@@ -15,6 +15,7 @@ WriteMakefile(
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Text-Graph-*' },
+    MIN_PERL_VERSION   => 5.006,
     META_MERGE          => {
         'meta-spec' => { version => 2 },
         resources => {
