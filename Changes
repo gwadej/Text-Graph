@@ -1,5 +1,8 @@
 Revision history for Text::Graph.
 
+0.81  2014-09-04T10:25-0600
+  - Fixed missing dependency
+  - Added missing synopsis.
 0.80  2014-09-03T20:20-0600
   - Add perl version check to the author tests.
   - Update Makefile.PL to have minimum Perl version

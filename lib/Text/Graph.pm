@@ -7,7 +7,7 @@ use namespace::clean;
 
 use Text::Graph::DataSet;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 has style => (
     is     => 'ro',
@@ -276,12 +276,13 @@ Text::Graph - Perl module for generating simple text-based graphs.
 
 =head1 VERSION
 
-This document describes "Text::Graph" version 0.80.
+This document describes "Text::Graph" version 0.81.
 
 =head1 SYNOPSIS
 
-  use Text::Graph;
-  blah blah blah
+    use Text::Graph;
+    my $graph = Text::Graph->new( 'Bar' );
+    print $graph->to_string( $dataset, labels => $labels );
 
 =head1 DESCRIPTION
 

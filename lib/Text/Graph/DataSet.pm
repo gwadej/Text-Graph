@@ -5,7 +5,7 @@ use warnings;
 use Moo;
 use namespace::clean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 has values => (
     is     => 'ro',
@@ -85,7 +85,7 @@ Text::Graph::Data - Encapsulate data for Text::Graph
 
 =head1 VERSION
 
-This document describes "Text::Graph::Data" version 0.80.
+This document describes "Text::Graph::Data" version 0.81.
 
 =head1 SYNOPSIS
 
