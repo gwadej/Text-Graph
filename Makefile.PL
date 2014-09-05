@@ -10,9 +10,10 @@ WriteMakefile(
     LICENSE             => 'perl',
     PL_FILES            => {},
     PREREQ_PM => {
-        'Test::More' => 0,
-        'version'    => 0,
-        'Moo'        => 0,
+        'Test::More'       => 0,
+        'version'          => 0,
+        'Moo'              => 0,
+        'namespace::clean' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Text-Graph-*' },
