@@ -7,7 +7,7 @@ use namespace::clean;
 
 use Text::Graph::DataSet;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 has style => (
     is     => 'ro',
@@ -307,14 +307,14 @@ The list below describes the parameters.
 
 B<minval> - Minimum value cutoff. All values below I<minval> are considered
 equal to I<minval>. The default value for I<minval> is 0. Setting the 
-I<minval> to C<undef> causes C<TextHistogram::Bars> to use the minimum of
+I<minval> to C<undef> causes C<Text::Graph> to use the minimum of
 I<values> as I<minval>.
 
 =item *
 
 B<maxval> - Maximum value cutoff. All values above I<maxval> are considered
 equal to I<maxval>. The default value for I<maxval> is C<undef> which causes
-C<TextHistogram::Bars> to use the maximum of I<values> as I<maxval>.
+C<Text::Graph> to use the maximum of I<values> as I<maxval>.
 
 =item *
 

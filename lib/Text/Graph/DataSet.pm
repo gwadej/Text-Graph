@@ -5,7 +5,7 @@ use warnings;
 use Moo;
 use namespace::clean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 has values => (
     is     => 'ro',

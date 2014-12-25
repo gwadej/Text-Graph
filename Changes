@@ -1,5 +1,7 @@
 Revision history for Text::Graph.
 
+0.83  2014-12-24
+  - Fixed a really old documentation error, thanks to RSAVAGE for reporting.
 0.82  2014-09-04T23:30-0600
   - Fixed another missing dependency
 0.81  2014-09-04T10:25-0600
