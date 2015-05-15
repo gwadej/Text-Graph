@@ -9,8 +9,13 @@ WriteMakefile(
     ABSTRACT_FROM       => 'lib/Text/Graph.pm',
     LICENSE             => 'perl',
     PL_FILES            => {},
-    PREREQ_PM => {
+    CONFIGURE_REQUIRES  => {
+        'ExtUtils::MakeMaker' => 0,
+    },
+    BUILD_REQUIRES => {
         'Test::More'       => 0,
+    },
+    PREREQ_PM => {
         'version'          => 0,
         'Moo'              => 0,
         'namespace::clean' => 0,
